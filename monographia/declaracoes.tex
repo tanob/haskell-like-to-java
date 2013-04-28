@@ -1,0 +1,27 @@
+% declaracoes.tex
+
+\hyphenation{gra-má-ti-ca}
+
+% newcommands
+
+\newcommand{\ingles}[1]{\textsl{#1}}
+
+\newcommand{\progb}[1]{
+  \normalfont\ttfamily 
+  {\small 
+  \begin{center}
+  \parbox{\textwidth}{\begin{tabbing}
+        #1 
+  \end{tabbing}}
+  \end{center} }
+  \normalfont}
+
+\newcommand{\progfig}[1]{\fbox{\parbox{\textwidth}{
+  \normalfont\ttfamily 
+  {\small 
+  \begin{center}
+  \parbox{\textwidth}{\begin{tabbing}
+        #1 
+  \end{tabbing}}
+  \end{center} }
+  \normalfont}}}

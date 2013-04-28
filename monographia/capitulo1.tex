@@ -1,0 +1,935 @@
+% capitulo1.tex
+\chapter{Programação Funcional}
+
+Programação Funcional é assim chamada porque um programa consiste inteiramente em funções. A própria função
+principal do programa é definida em termos de outras funções, e assim sucessivamente, até o nível base das
+funções, que são as primitivas da linguagem \cite{whyfp}. Ao contrário do paradigma imperativo, linguagens
+funcionais, em sua forma pura, não suportam mudanças de estado, dando ênfase na aplicação de funções.
+
+Este capítulo mostra as origens da programação funcional com o Cálculo Lambda na seção \ref{sec:calclambda},
+e nas seções seguintes explora as primeiras linguagens funcionais e a evolução delas até a linguagem estado
+da arte, Haskell, na seção \ref{sec:haskell}.
+
+\section{Cálculo Lambda}
+\label{sec:calclambda}
+
+O cálculo lambda é um modelo matemático, e pode ser pensado como uma linguagem de programação pura, baseada 
+na definição e aplicação de funções, e o seu método de iteração é através da recursão. Esse modelo permite 
+a representação de qualquer algoritmo, e é pura no sentido de que as funções recebem e retornam dados, que 
+podem ser inclusive funções, e não podem ser alterados pela função.
+
+Na área da matemática e da ciência da computação, funções de ordem superior (\textit{high order functions}) são funções que podem receber funções como argumentos, assim como produzir funções como resultado de sua
+computação.
+
+Por ser um modelo simples, o cálculo lambda permite demonstrar alguns conceitos importantes de linguagens de programação, como por exemplo ligação, escopo, ordem de avaliação, computabilidade, sistemas de tipos, etc.
+
+Existem três tipos de expressões lambda:
+
+\begin{itemize}
+	\item Variáveis: expressas, normalmente, através de identificadores alfanúmericos;
+	\item Aplicações ($e_1$ $e_2$): representam a aplicação da expressão $e_1$ para $e_2$;
+	\item Abstrações ($\lambda{}x.e$): representam a função que retorna o valor $e$ quando recebe o parâmetro formal $x$.
+\end{itemize}
+
+
+Podemos, por exemplo, definir a função identidade através da seguinte \textit{abstração-$\lambda{}$}:
+
+\begin{center}
+$(\lambda{}x. x)$
+\end{center}
+
+Quando as abstrações-$\lambda{}$ encontram-se aninhadas, há a convenção sintática de deixar de usar 
+o ponto para separá-las, assim como de eliminar os parênteses para facilitar o entendimento 
+da expressão. Outras duas convenções dizem respeito quanto à ordem de aplicação das funções, que devem
+ocorrer da esquerda para a direita, e que o escopo de uma abstração-$\lambda{}$ se estende o máximo
+possível para a direita, por exemplo $\lambda{}x.xy$ deve ser lido como $\lambda{}x.(xy)$, e não como
+$(\lambda{}x.x)y$. Em uma expressão $\lambda{}x.E$, $E$ é chamado de escopo $x$.
+
+As variáveis em expressões-$\lambda{}$ podem ser \textit{ligadas} ou \textit{livres}. Uma variável é ligada
+quando está associada a uma abstração-$\lambda{}$, e livre caso contrário.
+Expressões que diferem apenas no nome das variáveis ligadas (ou seja, não há uma diferença semântica)
+são chamadas de expressões $\alpha{}$-equivalentes, por exemplo a expressão $(\lambda{}y. y)$ é
+$\alpha{}$-equivalente à função identidade mostrada previamente, logo são expressões sinônimas.
+
+A aplicação de abstrações-$\lambda{}$ é baseada em substituições, por exemplo:
+
+\progb{
+	$(\lambda{}x.M)N = [N/x]M$
+}
+
+\noindent
+significa que $N$ é o parâmetro da abstração-$\lambda{}$. Assim, todas as ocorrências de $x$
+na expressão $M$ serão substituídas pela expressão $N$, e essa substituição pode ser representada
+por $[N/x]M$. Uma expressão $W$ é dita $\beta{}$-equivalente a $Y$ se a expressão $W$ for
+$\alpha{}$-equivalente a $Y$ após zero ou mais substituições.
+As seguintes expressões são $\beta{}$-equivalentes a $x$:
+
+\progb{
+	$(\lambda{}y.y)x$ \\
+	$(\lambda{}y.x)x$ \\
+	$(\lambda{}f.f x)(\lambda{}y.y)$ \\
+	$x$
+}
+
+Em cálculo lambda há duas ordens de se avaliar uma expressão: avaliação por valor (\textit{eager evaluation}),
+onde a redução ocorre no parâmetro antes deste ser aplicado à função, e \label{sec:avpreguicosa} avaliação preguiçosa (\textit{lazy evaluation}), onde o parâmetro da função é substituído inteiramente no corpo da função, havendo redução do parâmetro dentro do corpo da função somente se necessário.
+
+A ordem de avaliação de uma expressão é importante, pois pode resultar na expressão na sua forma normal
+(quando nenhuma substituição pode mais ser aplicada a uma expressão), ou então no não término da computação.
+A expressão $(\lambda{}x\lambda{}y.y)((\lambda{}z.zz)(\lambda{}z.zz))(\lambda{}w.w)$ demonstra a importância
+da escolha da ordem de avaliação, uma vez que através da ordem de avaliação por valor a computação dessa
+expressão não terminaria.
+
+% Watt, D. A. (1991). Programming Languages Syntaxe and Semantics. Prentice Hall
+\parbox{14.5cm}{
+\textbf{Teorema de Church e Rosser}:
+Se $v$ é o resultado da avaliação de uma
+expressão $M$ aplicando a ordem de avaliação preguiçosa, então qualquer
+que seja a ordem aplicada, ou o resultado é $v$ ou a avaliação falha (não termina).
+Se a avaliação de $M$ não termina usando a ordem preguiçosa, a avaliação 
+não termina usando qualquer ordem. \cite{ChurchRosser36}
+}
+
+\section{LISP}
+LISP ou Lisp \cite{Mc65} \sigla{Lisp}{\textit{LISt Processor} - Processador de listas} (acrônimo para \textit{LISt Processor}) foi a primeira linguagem de programação
+a possibilitar a definição de expressões sem efeitos colaterais \cite{jmitchell2003}.
+O projeto da linguagem foi publicado por McCarthy em um artigo em 1960 \cite{Mc60}, onde mostrava que com apenas
+alguns simples operadores e uma notação para funções, era possível construir uma linguagem Turing-completa
+\cite{wikipediaLisp}. Sua principal aplicação é na área de pesquisa em inteligência artificial e computação
+simbólica.
+
+Muitas implementações de Lisp foram desenvolvidas, levando a diversos dialetos da linguagem,
+como o Maclisp desenvolvido no MIT na década de 1960, e o Scheme, desenvolvido também no MIT na
+década de 1970 por Guy Steele e Gerald Sussman. Atualmente a forma de Lisp mais usada é
+o \textit{Common Lisp} \cite{IPS:1994:DPA}, que é uma especificação da linguagem publicada pela ANSI, e
+contém algumas primitivas de orientação a objeto.
+
+Embora Lisp tenha sua inspiração no cálculo lambda, elas possuem algumas diferenças importantes.
+Listas são o principal tipo de dado de Lisp, enquanto funções são o único tipo de dado no cálculo
+lambda puro (existe o cálculo lambda enriquecido, que possui algumas construções como de seleção,
+que tornam o uso de cálculo lambda mais agradável e fácil).
+
+Na especificação original, existia apenas dois tipos de dados: átomos e listas. Átomos podem ser
+alfanúmericos ou apenas números, e sua diferença consiste em ser imutável e único. As listas em Lisp são
+simplesmente ligadas, sendo a função $car$ usada para retornar o dado do nodo, e $cdr$ para retornar
+o próximo nodo. A função $cons$ é utilizada para construir uma lista, e existe a lista vazia,
+denotada por $nil$.
+
+O artigo de McCarthy definia duas sintaxes possíveis para a linguagem: expressões-S (\textit{s-expressions}
+ou \textit{Symbolic expressions}) e expressões-M (\textit{Meta expressions}), embora a segunda não seja muito usada.
+Expressões-S representam listas, e misturam códigos e dados em uma representação
+regular, baseada no uso intensivo de parênteses, que representam listas, e tem como o espaço o separador
+dos elementos. Desta forma, a linguagem é extremamente flexível, pois funções são declaradas como listas, 
+e assim podem ser processadas uniformemente como se fossem dados, o que dá origem à idéia de \textit{meta-programação}, onde programas podem se modificar.
+
+Lisp, na verdade, não é uma linguagem totalmente pura. Apenas um sub-conjunto de suas funções é puro,
+o que forma o chamado Lisp puro. São elas:
+
+\begin{tabular}{ll}
+	$cons$ & constrói uma lista \\
+	$car$ & retorna o dado do nodo \\
+	$cdr$ & retorna o próximo nodo \\
+	$eq$ & retorna $true$ se as duas expressões têm o mesmo valor \\
+	$atom$ & retorna $true$ se o valor da expressão é atômico
+\end{tabular}
+
+\noindent
+e algumas funções especiais:
+
+\begin{tabular}{ll}
+	$cond$ & retorna o valor da primeira expressão que tiver valor diferente de $nil$ \\
+	$lambda$ & similar ao cálculo lambda, retorna uma expressão para ser avaliada \\
+	$define$ & associa um átomo a uma expressão \\
+	$quote$ & retorna uma expressão cujo valor é o seu parâmetro \\
+	$eval$ & avalia o seu parâmetro \\
+\end{tabular}
+
+As expressões que começam com alguma dessas funções especiais são avaliadas de tal forma que determinadas
+partes de sua expressão não irão ser avaliadas naquele momento, por exemplo:
+
+\progb{
+	($cond$ ($p_1$ $e_1$) ($p_2$ $e_2$) ($p_n$ $e_n$))
+}
+
+Na expressão exemplificada, a avaliação dos parâmetros de $cond$ vai ocorrer da esquerda para a direita, 
+achando o primeiro $p_i$ com valor diferente de $nil$, retornando então o valor da expressão $e_i$.
+
+\progb{
+	(($lambda$ ($x$) ($+$ $x$ $10$)) $8$)
+}
+
+Nesse exemplo da função $lambda$, os seus parâmetros só serão avaliados quando um valor for aplicado.
+Se executada, essa expressão possui o valor $18$.
+
+  \progb{
+   ($define$\={} $find$ ($lambda$ ($x$ $y$) \\
+     \>($cond$\={} (($eq$ $y$ $nil$) $nil$)   \\
+     \>\>     (($eq$ $x$ ($car$ $y$)) $x$)  \\
+     \>($true$ ($find$ $x$ ($cdr$ $y$)))  \\
+   )))
+  }
+
+Através desse exemplo é mostrado como ocorre a recursão em Lisp, onde associamos ao átomo $find$ 
+uma expressão lambda. A função $find$ procura um elemento $x$ em uma lista $y$,
+retornando o valor $x$ caso o encontre, ou então retorna $nil$ caso o elemento $x$ não seja
+encontrado na lista.
+
+\section{ML}
+\label{sec:ML}
+
+A família de linguagens baseada em Algol foi desenvolvida em
+paralelo com Lisp, e levou ao desenvolvimento de ML e Modula \cite{Wirth77}.
+
+As principais características das linguagens derivadas de Algol
+são as expressões separadas por ponto e vírgula, a estrutura em blocos,
+funções e procedimentos, e tipagem estática.
+
+ML foi a primeira linguagem a incluir inferência de tipos polimórficos.
+
+ML é uma linguagem funcional com algumas possibilidades imperativas, sendo por isso
+considerada uma linguagem funcional impura.
+Ao mesmo tempo que é possível criar funções através de expressões lambda,
+passá-las para outras, e retornar funções como resultado
+de computações, ML também permite a escrita de algoritmos de forma imperativa,
+com uma sintaxe parecida com a de linguagens que descendem da família Algol.
+A versão de ML mais utilizada é a \textit{Standard} ML \cite{Mil90}.
+
+Enquanto Lisp é uma linguagem dinamicamente tipada, ou seja, os tipos das expressões
+são resolvidos em tempo de execução, ML é uma linguagem estaticamente
+tipada, onde as expressões possuem seus tipos resolvidos em tempo de compilação. 
+Seu sistema de tipos foi parte importante
+do projeto da linguagem, e é frequentemente considerado o mais limpo e expressivo 
+\cite{jmitchell2003}.
+
+Até o desenvolvimento do sistema de tipos de ML, linguagens com sistemas de tipos consistentes 
+(\textit{sound type systems})
+eram consideradas restritivas. Esse novo sistema é matematicamente preciso, no sentido
+de que se uma parte do compilador, chamado de verificador de tipos (\textit{type checker}), determina que uma expressão
+possui um certo tipo, é então garantido que na avaliação daquela expressão o valor resultante terá como tipo
+o mesmo determinado pelo verificador. Logo, uma das vantagens que linguagens estaticamente tipadas
+possuem é essa segurança dada pelo verificador de tipos, que possibilita que vários problemas de programação
+sejam encontrados em tempo de compilação. Por exemplo, se o verificador determinou que uma expressão possui
+o tipo ``ponteiro para string'', então é garantido que quando a expressão for avaliada, o valor dessa expressão
+será um ``ponteiro para string'', e não um ponteiro para uma string que já foi desalocada da memória, ou que
+esteja apontando para outro valor que não uma string.
+
+A linguagem foi desenvolvida por Robin Milner e seus colegas na década de 1970 na Universidade de Edinburgh,
+como parte de um projeto maior chamado de \textit{Logic for Computable Functions} - LCF \sigla{LCF}{\textit{Logic for Computable Functions} - Lógica para funções computáveis}, cujo objetivo era desenvolver
+um sistema para provar propriedades de programas funcionais, de uma maneira automática ou semi-automática.
+Dessa maneira, ML foi desenvolvida como uma meta-linguagem (daí a origem de seu nome, \textit{Meta-language})
+ para o projeto LCF.
+\sigla{ML}{\textit{Meta-language} - Meta linguagem}
+
+Um conceito fundamental do LCF é o de táticas de prova (\textit{proof tatics}), que consiste em uma função
+que recebe uma fórmula, e realizando algumas asserções tenta achar uma prova para essa fórmula.
+Essa função possui três possíveis resultados:
+
+\parbox{\textwidth}{\[ t\acute{a}tica(f\acute{o}rmula) = \left\{ \begin{array}{l}
+	\text{tem sucesso e retorna a prova} \\
+	\text{procura infinitamente} \\
+	\text{falha}
+\end{array}\right.
+\]
+}
+
+Uma idéia adotada foi desenvolver um tipo $prova$, que seria retornado pela função \textit{tática},
+e distinguiria os resultados onde se consegue uma prova para a fórmula dos que não conseguem.
+Assim o tipo da função seria:
+
+\begin{center}
+	\textit{tática}: \textit{fórmula} $\rightarrow{}$ \textit{prova}
+\end{center}
+
+O problema que surgiu dessa solução foi como retornar as situações de falha pela função. Milner
+desenvolveu então o primeiro mecanismo de exceções com tipagem segura (\textit{type-safe}). Desse modo,
+quando for detectado que não há uma prova para a fórmula, a função pode lançar uma exceção.
+
+Com esse mecanismo de exceções em ML, a notação:
+
+\begin{center}
+	$f$: $A$ $\rightarrow{}$ $B$
+\end{center}
+
+significa $\forall{}x$ em $A$, se $f(x)$ termina normalmente sem lançar uma exceção, então
+$f(x)$ está em $B$.
+
+\subsection{Declarações e Tipos de Dados}
+
+Em ML as declarações que associam o valor de uma expressão a um identificador são escritas
+da seguinte maneira:
+
+\progb{
+	val <identificador> = <expressão>;
+}
+
+Assim, se quiséssemos associar o valor $3$ ao identificador $y$, faríamos:
+
+\progb{
+	val y = 3;
+}
+
+É importante notar que uma vez associado um valor a um identificador, esse não muda, portanto
+as declarações de ML introduzem constantes, não variáveis.
+
+Há duas maneiras de se declarar funções, uma com sintaxe uniforme com a declaração
+de identificadores, e que de certa forma lembra cálculo lambda:
+
+\progb{
+	val f = fun x => x+1;
+}
+
+\noindent
+e outra que não utiliza de atribuição:
+
+\progb{
+	fun f(x) = x + 1;
+}
+
+\noindent
+porém ambas as declarações se comportam da mesma maneira quando executadas. Na realidade o compilador
+transforma a segunda forma na primeira, sendo assim apenas um ``açúcar sintático''
+\footnote{Açúcar sintático (\textit{syntatic sugar}) é um termo introduzido por Peter Landin, que significa adições a sintaxe
+de uma linguagem de programação que não afetam a sua funcionalidade, apenas tornam o seu uso mais
+agradável (em inglês \textit{sweeter}) ao programador}.
+
+\subsubsection{Tipos Básicos}
+
+Os seguintes tipos básicos fazem parte de ML:
+
+\begin{itemize}
+	\item \textit{Unit}
+	\progb {() : unit}
+	Assim como o \textit{void} da linguagem C \cite{Ker88}, é o tipo de retorno de funções
+	que realizam apenas efeitos colaterais.
+	
+	\item \textit{Bool} \\
+	\progb{true : bool \\ false : bool}
+	Possui apenas esses dois valores válidos, sendo que valores $booleanos$ estão geralmente
+	associados à estrutura de seleção $if$:
+	
+	\progb{
+		if $e_1$ then $e_2$ else $e_3$
+	}
+	
+	sendo que a expressão $e_1$ deve ser um $booleano$, e $e_2$ e $e_3$ devem possuir o mesmo tipo, já
+	que o resultado de um $if$ é a execução de $e_2$ ou $e_3$, e este é o tipo da expressão $if$.
+	
+	Existem também as operações $AND$, $OR$ e $NOT$, porém o nome dos dois primeiros são $andalso$ e
+	$orelse$, nomes que reforçam qual é a ordem de avaliação. Por exemplo em uma expressão $a$ $andalso$ $b$,
+	se a expressão $a$ for $true$ então $b$ será avaliado, caso contrário não. Já na expressão 
+	$a$ $orelse$ $b$, caso $a$ seja $true$ a expressão $b$ não será avaliada.
+	
+	\item Inteiros \\
+	Valores como $-2,-1,0,1,2$ são inteiros válidos em ML, e possuem as seguintes operações aritméticas
+	triviais disponíveis: $+$, $-$, $*$ e $div$. Esses operadores são usados na forma infixa.
+	
+	\item Strings \\
+	São representadas através de uma sequência de caracteres entre aspas duplas.
+	\progb{``Olá mundo!'' :  string}
+	
+	\item Real \\
+	O tipo para números de ponto-flutuante em ML é o $real$, e as operações aritméticas $+$, $-$ e $*$ são
+	sobrecarregadas, porém operam apenas com operandos do mesmo tipo. Por exemplo, a soma de um número
+	inteiro $7$ e o número $5,2$ é inválida, pois são de tipos diferentes. Para essa soma ocorrer,
+	o número $7$ poderia ser convertido para ponto-flutuante através da função $real$, ou então utilizar
+	as funções $ceil$ (arredonda para cima) ou $floor$ (arredonda para baixo) para converter o número $5,2$.
+	
+	\item Tuplas \\
+	As tuplas podem ser de dois, três, \ldots{} $n$ tipos distintos:
+	
+	\progb{
+		(256, ``Maria'') \\
+		('Nitrogênio, 14.00674, ``Não metal'')
+	}
+
+	Partes da tupla podem ser acessadas através de funções que iniciam com ``\#'' e são seguidas
+	pela posição da parte desejada, que começa em 1. Por exemplo: $\#1(256$, $``Maria'')$ retornaria
+	o número $256$.
+	
+	\item Registros \\
+	Assim como os registros em Pascal \cite{Wir91}, ou \textit{structs} em C, em ML existem os chamados registros,
+	que são parecidos com as tuplas, porém usam apóstrofos ao invés de parênteses e as partes possuem nomes:
+	
+	\progb{
+		val pessoa = \{ Nome = ``Alfredo'', Idade = 33 \}
+	}
+	
+	O método para acessar alguma parte do registro é também parecido com o de tuplas. Utiliza-se, por exemplo, 
+	$\#Nome(pessoa)$ para acessar o campo correspondente ao nome da $pessoa$.
+	
+	\item Listas \\
+	As listas em ML podem ter qualquer tamanho, com a restrição de que todos os elementos da lista possuam
+	o mesmo tipo de dados. A lista vazia em ML, assim como em Lisp, é representada por $nil$, e a função
+	$cons$ por dois pontos.
+
+	\progb{
+		$3$ :: $nil$ \\
+		$1$ :: $2$ :: $[3$,$4$,$5]$
+	}
+	
+	O primeiro exemplo constrói a lista $[3]$, enquanto o segundo a lista $[1,2,3,4,5]$.
+\end{itemize}
+
+\subsubsection{Tipos Sinônimos e Algébricos}
+\label{sec:tipos-algebricos}
+
+Além dos tipos básicos, ML permite a declaração de tipos sinônimos e novos tipos de dados.
+Tipos sinônimos são construídos com base em tipos básicos, se associando um nome.
+
+\progb{
+	type Celsius = real;
+}
+
+Para declaração de novos tipos de dados, também chamados de tipos algébricos, é usada a seguinte sintaxe:
+
+\progb{
+	datatype <nome do tipo> = \=<construtor 1> $|$ <construtor 2> $|$ \ldots{} $|$ \\ 
+	\>$|$ <construtor n>;
+}
+
+onde a sintaxe para os construtores tem a forma:
+
+\progb{
+	<construtor n> = \=<nome do construtor> $|$ \\ 
+	\>$|$ <nome do construtor> of <tipos dos argumentos>
+}
+
+Os tipos algébricos podem ser classificados da seguinte forma:
+
+\begin{itemize}
+	\item Enumeração \\
+		São tipos em que os construtores não possuem argumentos, por exemplo:
+	
+		\progb{
+			datatype Temperatura = Fria $|$ Quente $|$ Morna; \\
+			datatype Estacoes = Inverno $|$ Verao $|$ Primavera $|$ Outono;
+		}
+	
+	\item Produto \\
+		É a definição de um construtor com parâmetros:
+		
+		\progb{
+			datatype Dupla = Par of float * float;
+		}
+	
+	\item União disjunta \\
+		Utilizados quando não apenas desejamos distinguir entre possíveis valores, mas também armazenar
+		algumas informações importantes ao construtor.
+		
+		\progb{
+			datatype Forma = Circulo of float $|$ Retangulo of float * float;
+		}
+		
+		Podemos interpretar o exemplo acima como: $Circulo$ constrói uma $Forma$ com qualquer $float$.
+
+	\item Recursivos \\
+		São tipos que utilizam a sua própria definição dentro de seus construtores.
+		
+		\progb{
+			datatype ArvoreBin = Folha of int $|$ Nodo of (ArvoreBin * ArvoreBin);
+		}
+		
+		O construtor $Folha$ representa uma folha da árvore, enquanto o outro, $Nodo$, representa
+uma bifurcação, que leva a duas outras árvores.
+				
+	\item Polimórficos \\
+		Quando deseja-se parametrizar o tipo a ser armazenado no tipo algébrico. Poderíamos declarar
+uma árvore binária que não apenas armazenasse inteiros, mas qualquer outro tipo de valor:
+
+		\progb{
+			datatype 'a ArvoreBin = Folha of 'a $|$ Nodo of (ArvoreBin * ArvoreBin);
+		}
+		
+		Desta forma, o tipo $'a$ poderá assumir qualquer tipo válido no programa.		
+\end{itemize}
+
+Os construtores não executam nenhuma computação sobre seus argumentos, mas apenas armazenam
+os dados, que podem ser acessados posteriormente através de \textit{casamento de padrão} 
+(\textit{pattern matching}).
+
+\progb{
+	fun valorNaArvore(x, Folha(y)) = x = y \\
+	$|$ valorNaArvore(x, Nodo(y,w)) = valorNaArvore(x,y) orelse valorNaArvore(x,w);
+}
+
+O casamento de padrão ocorre na ordem de declaração das cláusulas, primeiramente tentando casar
+o segundo argumento de $valorNaArvore$ com uma Folha, disponibilizando o inteiro através do identificador
+$y$. Caso não case, é tentado o segundo padrão, onde é testado se a $ArvoreBin$ passada é uma 
+instância de $Nodo$, e, caso seja, as duas sub-árvores estarão disponíveis em $y$ e $w$.
+
+
+
+\subsubsection{Referência}
+
+Conforme dito na seção \ref{sec:ML}, ML é uma linguagem funcional impura. O motivo disto 
+é que o sistema de tipos define tipos de dados que fazem referência a uma área na memória, chamada 
+de célula (\textit{reference cell}).
+Contudo, o sistema de tipos é construído de tal forma que não permite situações comuns em outras linguagens,
+como C, de ponteiros para áreas de memória que estão desalocadas, ou então ponteiros para um tipo,
+apontando para dados de outro tipo.
+
+O mecanismo de referência possui 3 operações básicas:
+
+\begin{itemize}
+	\item \textit{Criação de uma referência}: $ref$ $v$ \\
+	Cria uma célula de referência para o valor $v$, e retorna um tipo de dado $ref$ $v$;
+	
+	\item \textit{Acesso ao valor de uma célula de referência}: $!$ $v$ \\
+	Retorna o valor armazenado na célula de referência $v$, cujo tipo é o de $v$;
+	
+	\item \textit{Alteração do valor de uma célula de referência}: $r$ $:=$ $v$ \\
+	Coloca o valor $v$ na célula de referência $r$, e retorna $unit$.
+\end{itemize}
+
+Pode-se observar que a maneira utilizada por ML para evitar a criação de ponteiros
+não inicializados é que um ponteiro para ser criado deve apontar para uma célula, que é inicializada
+com um valor fornecido.
+
+Como ML não fornece funções para descobrir o endereço de um valor, o mecanismo de referências é uma
+perfeita abstração, que fornece um lugar para se colocar um valor, de qualquer tamanho, e que também
+lida com as questões de gerenciamento de memória desse espaço. Um exemplo que demonstra essa abstração
+é:
+
+\progb{
+	val s1 = ref ``string menor''; \\
+	s1 := ``uma string gigante'';
+}
+
+É responsabilidade do compilador gerenciar o redimensionamento da célula que contém o valor de $s1$.
+O exemplo acima também demonstra que duas ou mais expressões imperativas podem ser combinadas, apenas
+utilizando-se ponto-e-vírgula para separá-las.
+
+\section{Sistema de tipos e Inferência}
+
+Tipos são uma coleção de entidades que possuem propriedades em comum. São geralmente utilizados para:
+\begin{itemize}
+\item dar nome e organizar conceitos;
+\item dar certeza de que sequências de bits na memória do computador serão interpretadas consistentemente;
+\item prover informação para o compilador sobre os dados que estão sendo manipulados pelo programa,
+possibilitando ao compilador fazer algumas otimizações.
+\end{itemize}
+
+O uso de tipos também tem papel importante na documentação do programa, pois facilita a leitura, o entendimento
+e a manutenção pelo programador, com a vantagem sobre comentários no programa, pois tipos são 
+checados pelo compilador, enquanto comentários podem estar desatualizados ou escritos de forma
+errada.
+
+Um sistema de tipos pode ser formalmente descrito através de um conjunto de regras de inferência de tipo
+para cada uma das expressões válidas na linguagem. É definido um algoritmo que, dados uma expressão
+e um contexto de tipos, infere o tipo principal dessa expressão. 
+O contexto de tipos contém as variáveis livres da expressão (variáveis usadas, mas não definidas na expressão).
+O tipo principal de uma expressão é o mais geral possível
+que essa expressão poderá ter \cite{Pie02}. Os tipos representados pelo tipo principal são chamados 
+de instâncias desse tipo.
+
+\subsection{Segurança e Checagem de Tipos}
+
+Um erro de tipo acontece quando uma expressão utiliza uma entidade de forma errada, por exemplo
+somar um inteiro com uma string.
+
+Uma linguagem é dita de tipagem segura (\textit{type safe}) quando não há possibilidade de um programa violar o seu
+sistema de tipos, logo um inteiro possui um tipo, uma função possui um tipo diferente de um inteiro, então
+um inteiro não poderá ser usado como uma função.
+
+A checagem dos tipos pode ocorrer em tempo de execução (\textit{runtime check}) ou em tempo de compilação,
+sendo que a primeira introduz uma sobrecarga (\textit{overhead}) no tempo de execução das operações, pois o compilador
+gera um código que faz algumas assertivas antes de executar a operação, estas assertivas poderiam
+ser resolvidas em tempo de compilação, evitando que problemas sejam descobertos quando o programa
+já estiver em ambiente de produção.
+
+Uma combinação das duas maneiras de checagem é empregada em diversas linguagens, como na 
+linguagem Java, que, por exemplo, checa se os tipos estão sendo corretamente usados na compilação, mas
+verifica problemas com acesso a posições acima do tamanho máximo nas matrizes (\textit{array bound errors}),
+em tempo de execução.
+
+\subsection{Inferência de Tipos}
+
+Inferência de tipos é o processo de determinar os tipos das expressões, baseando-se nos tipos
+que são conhecidos dos símbolos que encontram-se nelas. Foi proposto para a linguagem ML por
+Robin Milner, porém sua idéia pode ser aplicada em outras linguagens de programação.
+
+Conforme veremos no algoritmo de inferência, os tipos ainda não resolvidos são representados
+por variáveis de tipos. ML possui suporte a tipos polimórficos, que são representados por variáveis 
+de tipos.
+
+As expressões válidas no núcleo da linguagem ML, proposta por Damas-Milner
+\cite{Mil78, Dam82}, são definidas pela seguinte sintaxe, onde
+$x$ representa uma variável, elemento de um conjunto predefinido de
+variáveis:
+
+\progb{$e$ ::= $x$ | $e$ $e'$ | $\lambda x.e$ | let $x$ = $e$ in $e'$}
+
+Nessa mini-linguagem, uma expressão da forma {\tt let\/} $x$ = $e$
+{\tt in} $e'$ pode introduzir uma variável $x$ de tipo
+polimórfico, de forma que $x$ possa ser usada na expressão $e'$ em
+contextos que requerem tipos distintos.
+
+Sendo $\alpha$ uma meta-variável de tipo,
+as expressões de tipos nessa mini-linguagem são dadas pela
+seguinte sintaxe:
+
+\progb{$\tau$ ::= $\alpha$ | $\tau\rightarrow\tau$\\ $\sigma$ ::= $\tau$ |
+$\forall\alpha.\sigma$}
+
+Os tipos são assim divididos em monomórficos (denotados por
+variáveis $\tau$, $\tau'$ etc., possivelmente subscritas) e 
+polimórficos (denotados por $\sigma$, $\sigma'$, etc). Tipos
+polimórficos são definidos por meio do quantificador universal,
+sendo por isso também chamados de tipos quantificados.
+
+O conjunto de expressões ``bem tipadas'' é definido pelo sistema de
+tipos apresentado na Figura~\ref{fig:milner}. Fórmulas desse sistema
+têm a forma $\Gamma\vdash e:\sigma$, significando que a expressão $e$
+tem tipo $\sigma$ no contexto de tipos $\Gamma$.
+
+Um contexto de tipos no sistema de Damas-Milner contém apenas uma
+suposição de tipo para cada variável $x$. $\Gamma_{x}$ representa
+o contexto $\Gamma$, mas sem qualquer suposição de tipo para $x$. A
+relação $\sigma<\sigma'$ indica que o tipo polimórfico $\sigma$ é
+mais geral que o tipo $\sigma'$.
+
+\begin{figure}
+\fbox{\parbox{\textwidth}{
+\begin{align*}
+ & \tag{VAR}   \Gamma\vdash x:\sigma && (x:\sigma\in\Gamma)
+ \\[.3cm]
+ & \tag{INST} \frac{\Gamma\vdash e:\sigma}{\Gamma\vdash
+ e':\sigma'} && (\sigma < \sigma')\\[.3cm]
+ & \tag{GEN}  \frac{\Gamma\vdash e:\sigma}{\Gamma\vdash
+ e:\forall\alpha.\sigma}&& (\alpha \text{ não é livre em } \Gamma)\\[.3cm]
+ & \tag{APPL} \frac{\Gamma\vdash e:\tau\rightarrow\tau'
+ \hspace*{1cm} \Gamma\vdash e':\tau}{\Gamma\vdash(e
+ \hspace*{.1cm}
+ e'):\tau'}\\[.3cm]
+ & \tag{ABS} \frac{\Gamma_{x}\cup\{x:\tau'\}\vdash
+ e:\tau}{\Gamma\vdash(\lambda x.e):\tau'\rightarrow\tau}\\[.3cm]
+ & \frac{\tag{LET} \Gamma\vdash e:\sigma \hspace*{1cm}
+ \Gamma_{x}\cup\{x:\tau'\}\vdash e':\tau}{\Gamma\vdash(\text{let } x=e \text{ in } e'):\tau}
+\end{align*}}}
+\caption{Sistema de tipos de Damas-Milner}
+\label{fig:milner}
+\end{figure}
+
+Um sistema de tipos ``declarativo'', como o da Figura
+\ref{fig:milner}, não provê diretamente um método para inferência de
+tipos, uma vez que pode existir mais de uma regra a ser usada em
+determinados casos (ou seja, pode existir mais de uma derivação para
+uma mesma fórmula $\Gamma \vdash e:\sigma$). Isso ocorre, no caso do
+sistema da Figura~\ref{fig:milner}, devido à existência das regras
+(INST) e (GEN).
+
+Para inferência de tipos neste sistema, é usado um algoritmo
+atualmente já bastante conhecido, chamado de {\it Algoritmo W\/}.
+Sua definição se baseia no uso de unificações \cite{John96}.
+
+Uma substituição é uma função de variáveis de tipo em expressões
+de tipo. Estas funções são comumente representadas como
+[$\tau_{1}/\alpha_{1}...\tau_{n}/\alpha_{n}$], ou
+[$\tau_{i}/\alpha_{i}$]$^{i=1..n}$. Substituições são estendidas
+de forma natural para homomorfismos sobre termos \cite{Vas04}.
+
+Escrevemos simplesmente $S\tau_{1} = S\tau_{2}$, em vez de $S(\tau_1) =
+S(\tau_2)$, e, em geral, adotamos a convenção (usual) de que a
+aplicação de substituições é associativa, escrevendo, por exemplo,
+$SS'S''\alpha$ em vez de $(S\circ (S' \circ S''))(\alpha)$, onde
+$\circ$ é o operador de composição de funções.
+
+Dois tipos $\tau_{1}$ e $\tau_{2}$ são ditos unificáveis quando existe
+uma substituição $S$ tal que $S(\tau_{1}) = S(\tau_{2})$.  Nesse
+caso, a substituição $S$ é chamada de {\it unificador\/} dos tipos
+$\tau_{1}$ e $\tau_{2}$. Um unificador $S_{g}$ é chamado de {\em
+unificador mais geral\/} se, para qualquer outro unificador $S$
+existe uma substituição $S'$ tal que $S'\circ S_{g} = S$. O {\it
+algoritmo W\/}, como apresentado por Damas e Milner \cite{Mil78},
+tem como entrada um par com um contexto de tipos $\Gamma$ e uma
+expressão, e retorna uma substituição e o tipo principal da
+expressão. Caso a expressão não tenha tipo principal, é indicada a
+ocorrência de um erro. O algoritmo é apresentado na
+Figura~\ref{fig:algoritmoW}, sendo que
+$\unificar(\tau_{1},\tau_{2})$ representa o unificador mais geral
+para o par de expressões de tipo, e o fechamento de um tipo
+(quantificação de suas variáveis de tipo) é definido como:
+
+\begin{figure}
+\progfig{
+ $W(\Gamma, x)$ = \=\\
+\>Se $\Gamma(x)$ = $\forall\alpha_{1}...\alpha_{2}.\tau$ então
+($Id,
+[\beta{i}/\alpha_{i}]\tau$)\\
+\> senão {\it Falha}\\\\
+$W(\Gamma, e\:e')$ = \\
+\>let \=($S_{1}, \tau)$ = $W(\Gamma, e)$\\
+\>\>($S_{2}, \tau')$ = $W(S_{1}\Gamma, e')$\\
+\>\> $S$ = $\unificar(S_{2}\tau, \tau'\rightarrow\beta)$ onde
+$\beta$ é livre\\
+\>in $(S\circ S_{2} \circ S_{1}, S\beta)$\\\\
+$W(\Gamma, \lambda x.e)$ = \\
+\>let $(S, \tau)$ = $W(\Gamma_{x}\cup\{x:\beta\}, e)$\\
+\>in $(S, S(\beta\rightarrow\tau))$\\\\
+$W(\Gamma, let~x=e~in~e')$ = \\
+\>let $(S_{1}, \tau)$ = $W(\Gamma, e)$\\
+\>\>$(S_{2}, \tau')$ =
+$W(S_{1}\Gamma_{x}\cup\{x:fechamento~(S_{1}\Gamma, \tau)\}, e')$\\
+\>in $(S_{1}\circ S_{2}, \tau')$
+
+  }  \caption{Algoritmo $W$}
+  \label{fig:algoritmoW}
+\end{figure}
+
+\progb{$fechamento(\Gamma, \tau)=\forall\alpha_{1}...\alpha_{n}.\tau$}
+{\parindent 0pt onde $\alpha_{1}...\alpha_{n}$ são variáveis de tipo
+que ocorrem em $\tau$, mas não em $\Gamma$.}
+
+Robinson \cite{Rob65} apresentou pela primeira vez um algoritmo que
+obtém o unificador mais geral para dois tipos ou então retorna um
+erro, caso os tipos não sejam unificáveis.
+
+\section{Haskell}
+\label{sec:haskell}
+
+Durante muito tempo pesquisadores de linguagens funcionais projetavam suas próprias linguagens para 
+explorar novas idéias, tornando muito difícil a interação com outros pesquisadores. Diante da necessidade
+de uma linguagem em comum, esses pesquisadores formaram um comitê para a definição de uma linguagem
+de experimentação/investigação, criando assim a linguagem Haskell \cite{Has02,historyHaskell}.
+
+Haskell é uma linguagem com avaliação preguiçosa e pura, ou seja, diferentemente de ML, não possui
+efeitos colaterais ou a presença de funcionalidades imperativas. O processo de definição da linguagem
+foi altamente baseado na linguagem Miranda \cite{miranda87}, por isso ambas possuem muitas similaridades.
+
+A primeira versão de Haskell (``Haskell 1.0'') foi definida em 1990. Os esforços do comitê resultaram
+em uma série de definições da linguagem, que no final de 1997 deram origem ao Haskell 98, uma especificação
+com a intenção de ser uma versão estável, mínima e portável da linguagem, que acompanhasse uma biblioteca
+padrão (chamada de \textit{Prelude}) para ensino, e também fosse uma base para futuras extensões.
+Haskell 98 foi revisada em 2002, e no início de 2006 começou o processo para definição da próxima
+versão de Haskell, chamada de Haskell$\prime$ (Haskell \textit{Prime}).
+
+Um programa em Haskell é um \textit{conjunto} de equações que definem funções e tipos algébricos de dados.
+É importante frisar a palavra \textit{conjunto}, pois a ordem das equações nos programas é, em geral,
+irrelevante, e não há a necessidade de se declarar a entidade antes de seu uso.
+
+\subsection{Avaliação Preguiçosa}
+
+Sendo Haskell uma linguagem funcional com avaliação preguiçosa, é possível declarar uma função que
+retorna uma lista, como no exemplo, infinita de números pares:
+
+\progb{
+	$numerosPares$ $::$ $[Integer]$ \\
+	$numerosPares$ = $filter$ ($\backslash{}n$ $\rightarrow{}$ $n$ `$mod$` $2$ \text{==} $0$) $[2..]$
+}
+
+Nesse exemplo, a primeira linha é chamada de assinatura da função. Ela explicita o tipo da função ao 
+compilador, e este depois compara o tipo que ele inferiu com o explicitado, alertando o programador
+caso o tipo explicitado seja mais geral que o inferido pelo compilador. O tipo da função $numerosPares$
+é uma lista de inteiros. A segunda linha define a computação da função. É utilizada a função $filter$,
+que tem assinatura $(a$ $\rightarrow{}$ $Bool)$ $\rightarrow{}$ $[a]$ $\rightarrow{}$ $[a]$. A letra $a$
+representa um tipo polimórfico, já que em Haskell estes são representados por letras a,b,\ldots{}, etc. 
+Dessa forma, a função $filter$ recebe, como primeiro parâmetro, uma função que filtra os elementos passados
+no segundo parâmetro, retornando todos
+os elementos em que a função de filtragem retornou $True$. Como função de filtragem foi utilizada
+a sintaxe para expressões lambda, que testa através de $mod$ se um número $n$ é par. No segundo parâmetro
+para $filter$, a lista de elementos a serem filtrados é uma lista infinita de elementos que começa
+em 2 ([$2$..]). Esse exemplo não poderia ocorrer em uma linguagem estrita, pois ficaria para sempre
+gerando os números da sequência do segundo parâmetro.
+
+\subsection{Classes de tipo}
+
+Uma das inovações que foram propostas no projeto de Haskell que a torna uma linguagem distinta em relação 
+a outras linguagens funcionais é o conceito de
+classes de tipo (\textit{type classes}). Este foi proposto por Wadler e Blott \cite{Wadler89} como solução
+para um problema relativamente pequeno, qual seja, o de tratar a igualdade e a sobrecarga de operadores númericos.
+A solução com o tempo foi generalizada para diversas formas, como é apresentado no artigo
+``Type classes: exploring the design space'' \cite{simonpj97}.
+
+Classes de tipo permitem sobrecarga \textit{ad-hoc} através da adição de restrições nas variáveis de 
+tipos em tipos parametricamente polimórficos. Essa restrição tipicamente envolve uma classe de tipo $T$
+e uma variável de tipo $a$, significando que $a$ somente poderá ser instanciada para um tipo cujos membros
+suportem as operações sobrecarregadas associadas com $T$. Graças a classe de tipos há uma maneira uniforme
+de se tratar sobrecarga em Haskell.
+
+O padrão Haskell 98 define diversos tipos de classe, dentre eles: igualdade ($Eq$), conversão de/para string
+($Read$ e $Show$ respectivamente), enumerações ($Enum$), operações númericas ($Num$, $Real$, $Integral$, 
+$Fractional$, $Floating$, $RealFrac$ e $RealFloat$), e indexação de matrizes ($Ix$).
+Analisando a classe de igualdade:
+
+\progb{
+class \={\it Eq\/} $a$  where\\
+ \>(\texttt{==}) :: $a\rightarrow a\rightarrow${\it Bool} \\
+ \>(\texttt{/=}) :: $a\rightarrow a\rightarrow${\it Bool}
+}
+
+Para um tipo de dado ser considerado uma instância de $Eq$, deve implementar todos os métodos
+definidos na classe. Considerando a implementação padrão de igualdade definida no $Prelude$:
+
+\progb{ class \={\it Eq} $a$ where \\
+        \>(\texttt{==}), (/=):: $a\rightarrow a\rightarrow Bool$\\
+        \>$x$ == $y$ = {\it not} ($x$ /= $y$) \\
+        \>$x$ /= $y$ = {\it not} ($x$ == $y$)}
+        
+Assim, o programador poderá implementar apenas uma das funções, pois a definição de uma está relacionada
+com a da outra, por exemplo:
+
+\progb{
+	data Pessoa = Pessoa \{ nome :: String, rg :: Int \} \\ 
+	\\
+	instance\={} Eq Pessoa where \\
+		\>p1 == p2 = rg p1 == rg p2	
+}
+
+No exemplo acima, sobrecarregamos o operador de igualdade ($==$) para o tipo de dados $Pessoa$,
+declarando que duas pessoas são iguais se possuírem o mesmo número de identidade.
+Esse exemplo também mostra a declaração de tipos algébricos com declaração de campos, chamados de
+registros (\textit{records}) em outras linguagens. Para cada nome de campo ($nome$, $rg$) no registro
+o compilador automaticamente gera uma função que extrai a informação armazenada nesse campo.
+
+A linguagem oferece uma alternativa à igualdade declarativa, disponibilizando assim uma igualdade estrutural
+automática para qualquer tipo de dado declarado. Essa igualdade estrutural é ativada adicionando-se a 
+palavra-chave ``deriving'' na declaração do tipo algébrico:
+
+\progb{
+	data\={} Pessoa = Pessoa \{ nome :: String, rg :: Int \} \\
+	\>deriving Eq
+}
+
+Dessa forma, duas pessoas serão iguais apenas se o conteúdo de suas estruturas forem iguais. Esta 
+funcionalidade não está disponível para classes declaradas pelo programador.
+
+\subsection{Mônadas}
+
+Operações de entrada e saída sempre foram um ponto delicado em linguagens funcionais, pois o objetivo
+destas operações é produzir efeitos colaterais. Tomando como exemplo a operação de entrada de dados pelo
+teclado, cada chamada a essa operação poderá retornar valores diferentes, o que não se encaixa com
+o conceito de função em uma linguagem funcional pura, onde o resultado de uma função, com os mesmos
+parâmetros, deverá ser sempre o mesmo. Porém, por outro lado, não há sentido em existir um programa
+sem que o mesmo se comunique com o ``mundo externo''.
+
+Enquanto esse problema continuava sem solução, em 1989, Eugenio Moggi publicou um artigo em que
+utilizava um conceito da Teoria das Categorias, chamado de Mônadas, para descrever funcionalidades
+de linguagens de programação \cite{moggi89}. Moggi utilizava mônadas para modularizar a estrutura
+da semântica denotacional, sistematizando o tratamento de diversas funcionalidades, como estados
+e exceções. Philip Wadler reconheceu que a técnica utilizada por Moggi poderia ser utilizada para
+estruturar outros programas funcionais \cite{Wadler90}, e assim sugeriu a sua introdução em Haskell, sendo então,
+a primeira linguagem funcional pura com uma maneira de simular computações imperativas.
+
+Um mônada é uma tripla ($M$, $unit$, $bind$) contendo um construtor de tipo $M$ e duas funções
+polimórficas.
+
+\progb{
+	$unit$ :: $a$ $\rightarrow{}$ $M$ $a$ \\
+	$bind$ :: $M$ $a$ $\rightarrow{}$ ($a$ $\rightarrow{}$ $M$ $b$) $\rightarrow{}$ $M$ $b$
+}
+
+Lê-se $a$ $\rightarrow{}$ $M$ $b$ como uma função que recebe um parâmetro de tipo $a$ e tem como
+resultado um valor de tipo $b$, podendo adicionalmente causar algum efeito capturado por $M$.
+Este efeito pode ser: agir sobre um estado, gerar alguma saída, lançar alguma exceção, ou qualquer
+outra coisa que o programador desejar.
+
+A função $unit$ serve para transformar um valor de tipo $a$ em uma computação que retorne esse valor.
+Para aplicarmos uma função $a$ $\rightarrow{}$ $M$ $b$ em uma computação $M$ $a$ usamos a função $bind$.
+
+\progb{
+	$m$ `$bind$` $\lambda{}a$. $n$
+}
+
+O exemplo acima pode ser lido como: realize a computação $m$, associe (\textit{bind}) o seu resultado a 
+variável $a$, e então realize a computação $n$. Com esta função, torna-se possível o encadeamento de ações
+imperativas.
+
+\begin{figure}[h]
+	\progfig{
+		$class$ \=$Monad$ $m$ $where$ \\
+					\>($>>=$)   :: $m$ $a$ $\rightarrow{}$ ($a$ $\rightarrow{}$ $m$ $b$) $\rightarrow{}$ $m$ $b$ \\
+			    \>($>>$)    :: $m$ $a$ $\rightarrow{}$ $m$ $b$ $\rightarrow{}$ $m$ $b$ \\
+			    \>$return$  :: $a$ $\rightarrow{}$ $m$ $a$ \\
+			    \>$fail$    :: $String$ $\rightarrow{}$ $m$ $a$ \\
+			    \\
+			    \>$m$ $>>$ $k$  =  $m$ $>>=$ $\backslash{}$\_ $\rightarrow{}$ $k$ \\
+			    \>$fail$ $s$  = $error$ $s$
+	}	
+	
+	\caption{Implementação da classe de tipos $Monad$}
+	\label{fig:monada-prelude}
+\end{figure}
+
+Vistos os conceitos fundamentais, em Haskell as funções $unit$ e $bind$ são conhecidas por $return$ e 
+pela função infixa $>>=$, e para poderem ser sobrecarregadas estão declaradas na classe de tipos $Monad$
+na biblioteca padrão $Prelude$. Sua implementação é mostrada na Fig.~\ref{fig:monada-prelude}.
+
+\begin{figure}[h]
+	\progfig{
+	type Logs = [String] \\
+	data Logger a = Logger (a, Logs) \\
+	\\
+	instance \=Monad Logger where \\
+	    \>return x = Logger (x, logVazio) \\
+	    \>m \={}>>= f = Logger (valorFinal, log1 ++ log2) \\
+	        \>\>where \=Logger (valorIntermediario, log1) = m \\
+	              \>\>\>Logger (valorFinal, log2) = f valorIntermediario \\
+	\\
+	logVazio :: [a] \\
+	logVazio = [] \\
+	\\
+	record :: String $\rightarrow{}$ Logger () \\
+	record s = Logger ((), [s]) \\
+	\\
+	runLogger :: Logger a $\rightarrow{}$ (a, Logs) \\
+	runLogger (Logger x) = x
+	}
+	
+	\caption{Implementação de um mônada para \textit{logs}}
+	\label{fig:monada-log}
+\end{figure}
+
+Para se declarar um construtor de tipo $M$ um mônada, é necessário apenas se sobrescrever as funções
+$return$ e $>>=$, visto que as duas outras funções possuem implementações padrão.
+A função $>>$ é definida em termo da função $>>=$, e sua diferença é que o resultado da primeira 
+computação não é utilizado pela segunda.
+
+Algo muito comum em programas imperativos é a utilização de funções que registram as operações
+executadas, os chamados \textit{logs}. No paradigma imperativo basta colocar as chamadas às
+funções de registro nos locais em que se deseja obter mais informações em tempo de execução, porém
+no paradigma funcional, isso é visto como um efeito colateral. Na Fig.~\ref{fig:monada-log} é implementado
+um mônada para fazer \textit{logs}, e o seu uso é exemplificado na Fig.~\ref{fig:exemplo-log} em
+um programa que calcula expressões aritméticas.
+
+\begin{figure}[h]
+	\progfig{
+	data Termo = Const Int | Soma Termo Termo \\
+	\\
+	calc :: Termo -> Logger Int \\
+	calc\={} (Const x) = \\
+	    \>do \=record ("valor de x eh " ++ (show x)) \\
+	       \>\>return x \\
+	\\
+	calc\={} (Soma x y) = \\
+	    \>do \=vx <- calc x \\
+	       \>\>vy <- calc y \\
+	       \>\>record ("A soma eh: " ++ (show (vx+vy))) \\
+	       \>\>return (vx+vy)
+	}
+	
+	\caption{Exemplo de uso do mônada definido na Fig.~\ref{fig:monada-log}}
+	\label{fig:exemplo-log}
+\end{figure}
+
+Notamos que o uso de mônadas é muito simples, e Haskell nos provê a sintaxe com ``\textit{do}'' para
+encadear ações, o que não passa de um açúcar sintático que depois é transformado para o operador $>>=$.
+Um exemplo de uso e do resultado obtido no \textit{console} interativo do compilador é:
+
+\progb{
+	Main> runLogger (calc (Soma (Const 37) (Const 5))) \\
+	(42,["valor de x eh 37","valor de x eh 5","A soma eh: 42"])
+}
+
+\section{Síntese}
+
+A fim de facilitar o entendimento deste trabalho, este capítulo introduziu a história e a base teórica do 
+mundo das linguagens funcionais. Começamos o capítulo explicando a origem das linguagens funcionais através
+do estudo do Cálculo Lambda. Na seção sobre Lisp, falamos sobre a primeira linguagem funcional desenvolvida.
+Em seguida vimos a linguagem ML, que foi a primeira linguagem com inferência de tipos e cujo sistema de tipos
+é até hoje considerado um dos mais limpos e expressivos. Falando em inferência de tipos, a seção após ML
+foi inteiramente sobre sistemas de tipos e como a inferência de tipos acontece. Ao final deste capítulo, sobre
+programação funcional, não poderíamos deixar de falar sobre o estado da arte e abordar a linguagem Haskell,
+que tem sido a principal ferramenta no estudo do paradigma funcional.
+
+Desta forma, podemos seguir para o próximo capítulo, que é dedicado à máquina virtual Java.
+

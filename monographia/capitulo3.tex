@@ -1,0 +1,783 @@
+% capitulo3.tex
+\chapter{Implementação}
+
+Neste trabalho foi implementado um compilador para uma linguagem funcional que tem \textit{bytecodes}
+Java como o seu código objeto. A linguagem funcional definida tem sintaxe similar a de Haskell,
+sua ordem de avaliação é estrita,
+é estaticamente tipada, possui inferência de tipos e não possui suporte à sobrecarga (\textit{overload}).
+O compilador possui no seu \textit{frontend} um analisador sintático e um inferidor de tipos, e seu
+\textit{backend} gera os \textit{bytecodes} Java.
+
+As seções seguintes demonstram os recursos do compilador desenvolvido, bem como alguns aspectos de sua
+implementação e utilização.
+
+\section{Analisador Sintático}
+
+O analisador sintático é uma parte de um compilador ou interpretador, cuja função é verificar se o texto de
+entrada (código fonte) está de acordo com a especificação léxica e sintática da gramática especificada. 
+Os analisadores léxicos e sintáticos podem ser implementados ou gerados semi-automaticamente por uma ferramenta 
+que tem como entrada uma gramática escrita em BNF \sigla{BNF}{Backus Naur \textit{Form} - Forma de Backus Naur}.
+
+Neste trabalho, o analisador sintático foi programado sem o auxílio de uma ferramenta, utilizando 
+uma biblioteca de combinadores monádicos em Haskell chamada de Parsec, o qual é visto em maiores 
+detalhes na próxima seção.
+
+\subsection{Parsec}
+
+Parsec é uma biblioteca de combinadores monádicos em Haskell. Combinadores são funções de ordem superior 
+que são utilizadas de forma infixa, e ditas monádicas porque lidam com mônadas.
+
+Ao contrário de ferramentas que geram analisadores sintáticos, como o clássico Yacc \sigla{Yacc}{\textit{Yet Another Compiler Compiler} - Ainda outro compilador de compiladores} \cite{yacc}, que oferecem
+um conjunto fixo de combinadores para definir gramáticas, os combinadores monádicos são manipulados como
+valores de primeira classe\footnote{Valor de primeira classe (\textit{first-class value} ou também as
+variantes \textit{first-class object}, \textit{first-class citizen} e \textit{first-class object}) é uma 
+entidade que pode ser usada sem restrições em programas (sem restrições quando comparado com outros objetos
+na mesma linguagem). O termo foi cunhado por Christopher Strachey na década de 1960.} e podem ser
+combinados de forma a definirem analisadores mais específicos \cite{meijer2001a}.
+Outra vantagem é que o programador utiliza apenas uma linguagem, evitando a integração de diferentes linguagens
+e ferramentas \cite{hughes2000}.
+
+Uma restrição do Parsec, e da maioria dos analisadores baseados em combinadores, é que não há uma maneira de
+lidar com recursão à esquerda. Caso uma produção seja recursiva à esquerda, o analisador entrará em um \textit{loop} infinito.
+Uma solução é a reescrita da gramática, uma vez que toda gramática recursiva à esquerda pode ser reescrita como recursiva à direita \cite{aho86}. Outra solução é a utilização de um combinador $chainl$ \cite{fokker95}, que
+implementa o padrão de reescrita da gramática.
+
+O Parsec já vem incluso na instalação do Glasgow Haskell Compiler - GHC \sigla{GHC}{Glasgow Haskell \textit{Compiler} - Compilador Haskell de Glasgow}, e pode ser importado através
+do módulo \textit{Text.ParserCombinators.Parsec}.
+
+Para construir um exemplo de uso do Parsec, vamos definir uma simples gramática para blocos de linguagens 
+de programação:
+
+\progb{
+	<sentenca> ::= letras ou números \\
+	<bloco> = { [ <sentenca> ; ]+ }
+}
+
+Um bloco contém uma lista de sentenças, e este é o resultado da avaliação da função $bloco$ do exemplo abaixo:
+
+\progb{
+import Text.ParserCombinators.Parsec\\
+\\
+separador \== char ';' \\
+sentenca \>= many alphaNum\\
+bloco \>= do  \=char '\{'; \\
+            \>\>sentencas <- sentenca `endBy1` separador \\
+            \>\>char '\}'; \\
+            \>\>return sentencas
+}
+
+As funções \textit{many}, \textit{alphaNum}, \textit{endBy1} e \textit{char} são combinadores monádicos
+fornecidos pelo Parsec.
+Para testar o analisador, podemos utilizar a função $parseTest$:
+
+\progb{
+*Main> parseTest bloco "\{sentenca1;sentenca2;\}" \\
+$[$"sentenca1","sentenca2"$]$
+}
+
+Vamos testar o caso onde uma sentença fica sem o ponto e vírgula no seu final:
+
+\progb{
+*Main> parseTest body "\{sentenca1\}"\\
+parse error at (line 1, column 11):\\
+unexpected "\}"\\
+expecting letter or digit or ";"
+}
+
+Como pode-se ver no exemplo acima, a biblioteca não apenas informa em qual linha do texto de entrada o 
+erro ocorreu, como também lista as possibilidades de produção (como o conjunto PRIMEIROS de um não-terminal).
+Uma das vantagens é que podemos associar uma mensagem de erro com os combinadores utilizando-se o combinador
+de erro \textit{<?>}. Reescrevendo o exemplo anterior com mensagens de erro personalizadas:
+
+\progb{
+separador \== char ';' <?> ``separador de sentenca'' \\
+sentenca \>= many (alphaNum <?> ``sentenca'')\\
+bloco \>= do  \=char '\{'; \\
+            \>\>sentencas <- sentenca `endBy1` separador \\
+            \>\>char '\}'; \\
+            \>\>return sentencas
+}
+
+Testando esta nova definição obtemos:
+
+\progb{
+*Main> parseTest body "\{sentenca1\}"\\
+parse error at (line 1, column 11):\\
+unexpected "\}"\\
+expecting sentenca or separador de sentenca
+}
+
+Para conhecer outros combinadores e obter a documentação dos utilizados no exemplo desta seção consulte 
+a documentação do Parsec \cite{parsec-doc}.
+
+\subsection{Código Intermediário}
+
+De acordo com o texto de entrada, o analisador sintático armazena em suas estruturas de dados uma representação
+intermediária, chamada de código intermediário. Nesta subseção veremos as principais estruturas utilizadas,
+bem como os seus significados.
+
+A representação adotada foi inspirada nos tipos algébricos usados por Mark P. Jones \cite{Mark99}
+para descrever informalmente o sistema de inferência de tipos da linguagem Haskell.
+
+\subsubsection{Identificadores}
+
+Os identificadores da linguagem são representados pelo tipo \textit{Id}, que armazena uma \textit{string}
+com o nome do identificador e também um inteiro representando o nível da sua declaração. Um nível de valor
+zero indica um identificador declarado no escopo global, e maiores que zero, indicam variáveis declaradas
+através do comando \textit{let}.
+
+\progb{
+	data Id = Id String Int
+}
+
+\subsubsection{Tipos}
+
+Os tipos são representados através do tipo algébrico \textit{Type}. As expressões de tipos podem ser:
+variáveis de tipo (\textit{TVar}), construtores de tipos (\textit{TCon}), aplicações de um tipo para outro
+(\textit{TAp}) e tipos polimórficos (também chamados de variáveis de tipo quantificadas).
+
+\progb{
+data Type \== TVar Tyvar \\
+			\>$|$ TCon Tycon \\
+			\>$|$ TAp Type Type \\
+			\>$|$ TGen Int \\
+\\
+data Tyvar = Tyvar String [Int] \\
+data Tycon = Tycon Id
+}
+
+Apresentamos abaixo alguns exemplos de como representar tipos primitivos da linguagem utilizando os construtores
+de tipos:
+
+\progb{
+	tChar  \== TCon (Tycon (Tycon (Id "Char" 0))) \\
+	tArrow \>= TCon (Tycon (Tycon (Id "(->)" 0))) \\
+	tList	 \>= TCon (Tycon (Tycon (Id "[]" 0)))
+}
+
+Uma função auxiliar \textit{fn} é utilizada para facilitar a criação de tipos para funções:
+
+\progb{
+infixr 4 `fn` \\
+fn :: Type -> Type -> Type \\
+a `fn` b = TAp (TAp tArrow a) b
+}
+
+\subsubsection{Substituições}
+
+As substituições têm um papel importante na inferência de tipos, pois mapeiam variáveis de tipo para tipos.
+
+\progb{
+	type Subst  = [(Tyvar, Type)]
+}
+
+Como as substituições podem ser aplicadas a tipos ou a qualquer estrutura que os contenha, então a função
+de aplicação (\textit{apply}) deve ser sobrecarregada para diferentes tipos. Para isso implementamos uma
+classe:
+
+\progb{
+cla\=ss Subs t where \\
+  \>apply :: Subst -> t -> t \\
+  \>tv    :: t -> [Tyvar]
+}
+
+A função \textit{tv} retorna um conjunto de variáveis de tipo que estão contidas em seu argumento,
+ordenadas por ordem de ocorrência.
+
+\subsubsection{Esquemas de Tipo (\textit{Type Scheme})}
+
+\textit{Type schemes} são utilizados na representação de tipos polimórficos, também chamados
+de tipos quantificados.
+
+\progb{
+data Scheme = Forall Type
+}
+
+\subsubsection{Suposições de Tipo}
+\label{sec:assump}
+
+Suposições sobre o tipo de uma variável são representadas por valores de \textit{Assump}. 
+Uma dupla com o tipo de definição (\textit{Kind\_of\_defining\_occurrence}) e com o esquema de tipo
+(\textit{Scheme}) é associado a um identificador:
+
+\progb{
+data Assump = Id :>: (Kind\_of\_defining\_occurrence, Scheme) \\
+data Kind\_of\_defining\_occurrence = CW $|$ LB
+}
+
+O tipo de definição (\textit{Kind\_of\_defining\_occurrence}) indica se a variável é ligada a uma
+$\lambda{}$-abstração.
+
+\subsubsection{Literais}
+
+Valores literais são representados por \textit{Literal}:
+
+\progb{
+data Literal \== LitInt   Integer \\
+			 \>$|$ LitChar  Char \\
+			 \>$|$ LitStr   String \\
+			 \>$|$ LitFloat Double
+}
+
+\subsubsection{Padrões}
+
+Padrões (do inglês \textit{patterns}) são utilizados para inspecionar e desconstruir valores de tipos
+algébricos. Os padrões serão representados através de instâncias do tipo \textit{Pat}:
+
+\progb{
+data Pat \== PVar Id \\
+			\>$|$ PLit Literal \\
+			\>$|$ PCon Assump [Pat] \\
+			\>$|$ PWildcard
+}
+
+O construtor \textit{PVar} representa variáveis que estão no padrão, da mesma forma literais por \textit{PLit},
+construções de padrões por \textit{PCon}, e um padrão coringa por \textit{PWildcard} (representado em programas
+como ``\_'').
+
+A seguinte função retorna o primeiro elemento de uma lista: 
+
+\progb{
+head :: [a] -> a \\
+head (x:\_) = x
+}
+
+Para fazer isto, a lista é desconstruída através
+do construtor de listas ``:'' em dois padrões: um padrão para a cabeça da lista ($x$) e outro que ignora
+o resto da lista. O retorno da função é o valor da variável $x$, que é associada ao padrão.
+
+O código intermediário gerado pelo analisador sintático para o padrão da função \textit{head} é:
+
+\progb{
+	PCon (\textit{Assump para ``:''}) [PVar (Id "x"~0),PWildcard]
+}
+
+\subsubsection{Expressões}
+
+As expressões são representadas por instâncias de \textit{Expr}:
+
+\progb{
+data Expr \== Var Id \\
+		  \>$|$ Lit Literal \\
+		  \>$|$ Const Assump \\
+		  \>$|$ Ap Expr Expr \\
+		  \>$|$ Let BindGroup Expr
+}
+
+Variáveis e literais são representados, respectivamente, por \textit{Var} e \textit{Lit}.
+O construtor \textit{Const} é utilizado para constantes com nomes, como, por exemplo, construtores de tipos.
+A aplicação de funções e a expressão \textit{let} são representadas, respectivamente, por \textit{Ap} e 
+\textit{Let}.
+
+\subsubsection{Alternativas}
+
+Para explicar alternativas, vamos analisar o seguinte exemplo:
+
+\progb{
+	len :: [a] -> Int \\
+	len [] = 0 \\
+	len (x:xs) = 1 + len xs
+}
+
+Neste exemplo, se diz que a função \textit{len} possui duas alternativas: a primeira retorna zero se a
+lista passada é vazia, e a segunda retorna um somado ao tamanho da lista $xs$.
+
+As alternativas para as funções são representadas através do tipo \textit{Alt}. 
+
+\progb{
+type Alt = ([Pat], Expr)
+}
+
+Este tipo é uma tupla,
+cujo primeiro componente é uma lista de padrões para cada um dos argumentos da função, e o segundo
+componente é a expressão associada àquela alternativa.
+
+\subsubsection{\textit{Binding Groups}}
+
+Os \textit{binding groups} são utilizados para agrupar todas as alternativas para um identificador,
+e podem ser explícitos e implícitos:
+
+\begin{itemize}
+	\item Explícitos: este tipo de \textit{binding group} representa funções em que o programador fez 
+uma declaração explícita do seu tipo. Estes tipos serão verificados na fase de inferência.
+
+	\progb{
+	type Expl = (Id, Scheme, [Alt])
+	}
+
+	\item Implícitos: representam funções sem tipo explícito, que terão seus tipos inferidos durante o processo
+de inferência.
+
+	\progb{
+	type Impl = (Id, [Alt])
+	}
+
+\end{itemize}
+
+Desta forma, um programa em Haskell pode ser representado por um tipo \textit{BindGroup}, que armazena
+a lista de \textit{binding groups} explícitos e implícitos:
+
+\progb{
+type BindGroup = ([Expl], [Impl])
+}
+
+\subsubsection{Exemplos de saídas}
+
+Vejamos dois exemplos de programas escritos na sintaxe da linguagem definida neste trabalho,
+analisando também a saída gerada pelo analisador sintático.
+
+Neste primeiro exemplo, vamos declarar um tipo de dado de enumeração para algumas cores:
+
+\begin{figure}
+	\progfig{
+	\{ data Cores = Azul $|$ Verde $|$ Vermelho; \}
+	}
+	\caption{Exemplo de tipo de dado de enumeração para cores}
+	\label{fig:enum-cores}
+\end{figure}
+
+Uma vez que o analisador sintático ainda não fornece suporte a \textit{layouts}, o programa deve ser
+declarado em um bloco entre chaves e cada declaração do programa
+deve ser terminada em ponto e vírgula, sendo que a última opcional.
+
+A saída do analisador sintático para o exemplo da Fig.~\ref{fig:enum-cores} é mostrada na
+ Fig.~\ref{fig:saida-enum-cores}.
+
+\begin{figure}[ht]
+	\progfig{
+	(\=[], $--$ Não há nenhum \textit{binding group} explícito (\textit{Expl}) \\
+	 \>[\={} $--$ Lista de \textit{binding groups} implícitos (\textit{Impl}) \\
+	  \>\>(I\=d "Azul"{} 0, $--$ Identificador ``Azul'' é definido em escopo global \\
+	  	\>\>\>[ \={}$--$ Lista de alternativas (\textit{Alt}) \\
+	  		\>\>\>\>(\=[], $--$ Nenhum padrão (\textit{Pat}) \\
+	  		 \>\>\>\>\>$--$ Para um construtor de tipo, utilizamos o construtor \textit{Const} de \textit{Expr} \\
+	  		 \>\>\>\>\>$--$ :>: é um construtor de suposições, assim, para todo ``Azul'' temos \\
+	  		 \>\>\>\>\>$--$  a suposição de tipo que ``Azul'' é do tipo ``Cor'' \\
+	  		 \>\>\>\>\>Const (Id "Azul"{} 0 :>: (CW,Forall (TCon (Tycon (Id "Cor"{} 0))))) \\
+	  		\>\>\>\>) \\
+	  	\>\>\>] \\
+	  \>\>), $--$ A explicação acima vale para os demais construtores de Cor \\
+	  \>\>(Id \="Verde"{} 0, \\
+	  \>\>\>[([],Const (Id "Verde"{} 0 :>: (CW,Forall (TCon (Tycon (Id "Cor"{} 0))))))]), \\
+	  \>\>(Id "Vermelho"{} 0, \\
+	  \>\>\>[([],C\=onst (Id "Vermelho"{} 0 :>: \\
+	  \>\>\>\>(CW,Forall (TCon (Tycon (Id "Cor"{} 0))))))]) \\
+	 \>]) \\
+	}
+	
+	\caption{Saída do analisador sintático para o exemplo da Fig.~\ref{fig:enum-cores}}
+	\label{fig:saida-enum-cores}
+\end{figure}
+
+Neste segundo exemplo, mostrado na Fig.~\ref{fig:func-len}, vamos definir uma função polimórfica que calcula o tamanho de uma lista.
+
+\begin{figure}[ht]
+	\progfig{
+	\{               \= \\
+	\>len $[]$ = 0 \\
+	\>len (x:xs) = 1 + len xs \\
+	\}
+	}
+	
+	\caption{Implementação da função \textit{len}}
+	\label{fig:func-len}
+\end{figure}
+
+Como não especificamos o tipo da função \textit{len}, a lista de \textit{binding groups} explícitos,
+assim como no exemplo anterior, é vazia. Por este motivo, vamos omitir algumas informações para
+simplificar a saída, mostrada na Fig.~\ref{fig:saida-func-len}.
+
+\begin{figure}[ht]
+	\progfig{
+	[ \={} $--$ Lista de \textit{Impl}\\
+		\>(I\=d "len"{} 0, \\
+			\>\>[\={}  $--$ Lista de \textit{Alt}\\
+			 \>\>\>(\=[PCon \{- Suposição de tipo para [] -\} []], $--$ Padrão \\
+			  \>\>\>\>Lit (LitInt 0) $--$ Expressão \\
+			 \>\>\>), \\
+			 \>\>\>( $--$ Padrão \\
+			 	\>\>\>\>[\=PCon \{- Suposição de tipo para (:) -\} [\=PVar (Id "x"{} 0),\\
+			 	\>\>\>\>\>\>PVar (Id "xs"{} 0)]], \\
+			 	 \>\>\>\>\>$--$ Expressão \\
+			 	 \>\>\>\>\>$--$ Podemos notar que ``1 + len xs'' é o mesmo que a aplicação \\
+			 	 \>\>\>\>\>$--$ da função (+1) com a função (len xs) \\
+			   \>\>\>\>\>Ap \=(Ap (Var (Id "+"{} 0)) (Lit (LitInt 1))) \\
+			   \>\>\>\>\>\>(Ap (Var (Id "len"{} 0)) (Var (Id "xs" 0))) \\
+			 \>\>\>) \\
+			\>\>]  $--$ Final da lista de \textit{Alt}\\
+		\>) \\
+	]
+	}
+
+	\caption{Exemplo de saída do analisador sintático para a função \textit{len}}
+	\label{fig:saida-func-len}
+\end{figure}
+
+
+\section{Inferidor de Tipos}
+
+O inferidor de tipos possui como principal estrutura de dados o tipo algébrico \textit{Assump},
+que já foi descrito na seção \ref{sec:assump}. Um contexto de tipos é uma lista de suposições de tipo,
+representado pelo tipo sinônimo \textit{TypCtx}:
+
+\progb{
+type TypCtx  = $[$Assump$]$
+}
+
+No começo do processo de inferência de tipos é passado um contexto de tipo inicial. Algumas das suposições
+que compõem o contexto inicial são mostradas abaixo:
+
+\progb{
+		  "+"{} :>: (CW, Forall (tInt `fn` tInt `fn` tInt)) \\
+		  "$-$"{} :>: (CW, Forall (tInt `fn` tInt `fn` tInt)) \\
+		  "*"{} :>: (CW, Forall (tInt `fn` tInt `fn` tInt)) \\
+		  "/"{} :>: (CW, Forall (tInt `fn` tInt `fn` tFloat)) \\
+		  "\&\&"{} :>: (CW, Forall (tBool `fn` tBool `fn` tBool)) \\
+		  "$||$"{} :>: (CW, Forall (tBool `fn` tBool `fn` tBool)) \\
+		  "not"{} :>: (CW, Forall ((tBool `fn` tBool))) \\
+		  "True"{} :>: (CW, Forall tBool) \\
+		  "False"{} :>: (CW, Forall tBool) \\
+		  "[]"{} :>: (CW, (Forall (TAp tList (TGen 0)))) \\
+		  ":"{}  :>: (CW, (Forall \=(TGen 0 `fn` \\
+		  					\>TAp tList (TGen 0) `fn` TAp tList (TGen 0))))
+}
+
+Baseado nesse contexto inicial, o tipo de cada declaração de função é inferido por um algoritmo similar
+ao algoritmo W, mostrado na Fig.~\ref{fig:algoritmoW}. 
+
+Em uma segunda etapa, os tipos inferidos para as declarações são unificados com os tipos requeridos.
+O tipo requerido é o tipo que foi inferido no momento da aplicação de uma função.
+Para que não exista a necessidade de uma ordenação topológica baseada na ordem de aplicação de funções,
+foi utilizado para a unificação dos tipos, inferidos e requeridos, o algoritmo proposto por \citeonline{Vas03}.
+
+\section{Saída do Compilador (\textit{backend})}
+
+Tendo como entrada o código intermediário e os tipos inferidos do programa, o objetivo da última parte
+do compilador é gerar \textit{bytecodes} Java. Nas subseções a seguir, veremos como são gerados os 
+arquivos \textit{.class} e quais as traduções que ocorrem para se obter um código orientado a objeto
+a partir de um código funcional.
+
+\subsection{Jasmin}
+
+Um dos objetivos deste trabalho é gerar \textit{bytecodes} Java para programas funcionais. Estes arquivos
+\textit{.class}, como já foi visto na seção \ref{sec:spec-class}, são arquivos binários.
+Geralmente os compiladores de linguagens nativas, por exemplo de C, geram um arquivo texto que contém 
+a representação do programa em uma linguagem de montagem (\textit{assembly}). Este arquivo é posteriormente
+compilado por um montador para um formato binário. Infelizmente, não há uma linguagem de montagem e um
+respectivo montador no \textit{kit} de desenvolvimento Java (Java Development Kit - JDK).
+\sigla{JDK}{Java \textit{Development Kit} - Kit de desenvolvimento Java}
+
+O padrão \textit{de facto} de uma linguagem de montagem Java é o Jasmin \cite{jasmin}. Este montador recebe 
+na sua entrada
+um arquivo ASCII com descrições das classes Java, em um formato simples e utilizando os mesmos nomes de 
+\textit{opcodes} da JVM. O montador Jasmin então converte estas descrições para o formato binário dos arquivos
+\textit{.class}, que então podem ser carregados normalmente pela JVM.
+
+\sigla{JAR}{Java \textit{ARchive} - Arquivo Java}
+
+O montador Jasmin é distribuído através de um pacote Java (Java \textit{ARchive} - JAR), e o funcionamento
+de como gerar os arquivos \textit{.class} é mostrado abaixo:
+
+\progb{
+	\$ java -jar jasmin.jar arquivo1.j arquivo2.j \ldots
+}
+
+\subsubsection{Formato do Arquivo Jasmin}
+
+O formato do arquivo de montagem do Jasmin é mostrado abaixo:
+
+\progb{
+<arq\=uivo\_jasmin> \{ \\
+    \><cabecalho> \\
+    \>[<atributos>]* \\
+    \>[<metodos>]* \\
+\}
+}
+
+Apenas uma classe Java pode ser especificada por arquivo de montagem. Desta forma, informações sobre
+a classe ficam na parte de cabeçalho, seguidas, opcionalmente, pelos atributos e métodos da classe.
+
+\progb{
+	.class public NomeDaClasse \\
+	.super java/lang/Object \\
+	.implements nome/qualificado/da/Interface 
+}
+
+O código de montagem acima é equivalente a seguinte classe Java:
+
+\progb{
+	public \=class NomeDaClasse \\
+			   \>extends java.lang.Object  \\
+			   \>implements nome.qualificado.da.Interface \{\}
+}
+
+Como podemos observar, a classe ``NomeDaClasse'' estende a classe \textit{Object} do pacote \textit{java.lang}
+e implementa a interface declarada por \textit{nome.qualificado.da.Interface}.
+Para declararmos um atributo inteiro, público e com nome ``nomeDoAtributo'', usamos a seguinte linha:
+
+\progb{
+	.field public nomeDoAtributo I
+}
+
+A especificação dos tipos segue o padrão dos descritores de tipos (vistos na seção \ref{sec:jvm-opcodes}).
+
+Resta-nos saber agora como descrever métodos utilizando a linguagem Jasmin. Um exemplo que declara um método
+chamado ``umaString'', sem parâmetros, público, e que retorna uma \textit{string}, é mostrado abaixo:
+
+\progb{
+	.m\=ethod public umaString()Ljava/lang/String; \\
+		\>ldc ``isto eh uma string'' \\
+		\>areturn \\
+	.end method
+}
+
+A partir do exposto até agora, podemos escrever o clássico exemplo de ``Alô mundo!'' em Jasmin:
+
+\progb{
+.class public Hello \\
+.super java/lang/Object \\
+\\
+.m\=ethod public static main([Ljava/lang/String;)V \\
+	\>.limit stack 2\\
+		\\
+	\>getstatic java/lang/System/out Ljava/io/PrintStream;\\
+		\\
+	\>ldc "Alô Mundo!"\\
+		\\
+	\>invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\\
+		\\
+	\>return\\
+.end method\
+}
+
+Com a primeira linha dentro do método, especificamos o limite de valores que podem ser empilhados na pilha
+de operandos aritméticos. No exemplo acima, a pilha tem tamanho de duas posições e, como podemos notar, apenas 
+as instruções do montador começam
+com um ponto. As instruções da JVM não são prefixadas por este. A instrução \textit{getstatic} pega um
+campo estático da classe do primeiro parâmetro. Assim, no exemplo, se esta fazendo uma referência para
+\textit{java.lang.System.out}, cujo tipo é \textit{java.io.PrintStream}.
+Logo após, a instrução \textit{ldc} empilha um elemento que está na tabela de símbolos (\textit{constant pool}),
+no caso do exemplo, a \textit{string} ``Alô Mundo!''. Após a preparação para a chamada do método que irá
+imprimir na saída padrão do processo Java, é executado o método \textit{println} através da instrução
+\textit{invokevirtual}. No final do exemplo, temos a instrução \textit{return}, fazendo com que a máquina
+virtual restabeleça o controle para o método que efetuou a chamada. 
+
+O resultado da execução, após a montagem, do exemplo é a frase ``Alô Mundo!'' na tela.
+
+Para maiores informações e detalhes de cada uma das declarações possíveis, basta consultar a documentação
+do Jasmin \cite{jasmin}.
+
+\subsection{Traduções}
+
+A linguagem funcional definida neste trabalho possui dois tipos de declarações: tipos de dados algébricos 
+e funções.
+É com base nestes que iremos definir as traduções do paradigma funcional para o orientado a objeto da JVM.
+Embora o código seja gerado na linguagem de montagem Jasmin, para facilitar a leitura, os exemplos
+serão apresentados na linguagem Java.
+
+Primeiramente, os tipos de dados algébricos, como já vimos na seção \ref{sec:tipos-algebricos}, são divididos
+em: enumeração, compostos, recursivos e polimórficos. A tradução do tipo de dado algébrico de enumeração pode ser
+feito através de um novo tipo de dado na versão 5 da linguagem Java, o tipo enumerado (\textit{enum type})
+\cite{java-enum}, ou através do padrão \textit{Typesafe Enum} \cite{bloch2008}, este compatível com versões
+anteriores da JVM. 
+
+Entretanto, este trabalho optou pela tradução desses tipos algébricos de uma maneira uniforme, de forma que
+cada construtor do tipo algébrico seja uma subclasse de uma classe abstrata que leva o nome do tipo.
+A tradução para a linguagem Java do exemplo de tipo algébrico de enumeração da Fig.~\ref{fig:enum-cores} é
+mostrada abaixo:
+
+\progb{
+	public abstract class Cores \{\} \\
+	public Azul extends Cores \{\} \\
+	public Verde extends Cores \{\} \\
+	public Vermelho extends Cores \{\}
+}
+
+Diferentemente do tipo algébrico de enumeração, os demais tipos possuem construtores com parâmetros.
+Embora sejam tipos de dados, se passarmos apenas alguns parâmetros para um construtor, estaremos fazendo
+uma aplicação parcial (currificação) sobre o tipo de dado. Por exemplo:
+
+\progb{
+\{ \\
+	data Animal = Gato String Int \\
+\}
+}
+
+O tipo do construtor \textit{Gato} é \textit{String} -> \textit{Int} -> \textit{Gato}, logo, só teremos uma 
+instância de \textit{Gato} se passarmos uma \textit{string} e um inteiro.
+Como funções e tipos algébricos podem sofrer aplicações parciais, podemos pensar em uma maneira uniforme 
+de representá-los. 
+
+A representação escolhida é o uso de \textit{closures}, que consiste em um par de ponteiros,
+um para o código da função e outro para o registro de ativação \cite{jmitchell2003}. Quando o \textit{closure}
+vai ser executado é feito um salto para o endereço do código da função. Em Java, isto será feito através
+da chamada a um método.
+
+O presente trabalho definiu uma classe genérica e abstrata, chamada de \textit{Fun}, a qual possui 
+um método abstrato \textit{apply} que mapeia elementos de um tipo para outro. Esta classe representa a
+idéia do \textit{closure}, e o método \textit{apply} a da execução do \textit{closure}.
+A implementação da classe \textit{Fun} é mostrada abaixo:
+
+\progb{
+pu\=blic abstract class Fun<A, B> \{ \\
+	\>public abstract B apply(A x); \\
+\}
+}
+
+Isso significa que em tempo de compilação as variáveis de tipo \textit{A} e \textit{B} serão substituídas 
+pelos tipos especificados, garantindo que o programa esteja protegido pelo sistema de tipos contra erros 
+de tipo.
+
+Com base nisso, implementamos a tradução dos outros tipos algébricos como mostrado no exemplo abaixo, utilizando
+como exemplo o tipo \textit{Animal}:
+
+\progb{
+public abstract class Animal \{\} \\
+pu\=blic class Gato extends Animal \{ \\
+	\>public String f1; \\
+	\>public Integer f2; \\
+	\>pu\=blic Gato(String f1, Integer f2) \{ \\
+		\>\>this.f1 = f1; \\
+		\>\>this.f2 = f2; \\
+	\>\} \\
+\} \\
+public class GatoF1 extends Fun<String, GatoF1F2> \{ \\
+	\>public GatoF1F2 apply(String x) \{ \\
+		\>\>return new GatoF1F2(x); \\
+	\>\} \\
+\} \\
+public class GatoF1F2 extends Fun<Integer, Gato> \{ \\
+	\>public String f1; \\
+	\>public GatoF1F2(String f1) \{ \\
+		\>\>this.f1 = f1; \\
+	\>\} \\
+	\>public Gato apply(Integer x) \{ \\
+		\>\>return new Gato(this.f1, x); \\
+	\>\} \\
+\}
+}
+
+O tipo algébrico \textit{Animal} é traduzido em uma classe abstrata, pois não pode ser instanciada.
+Cada um dos construtores de \textit{Animal} são subclasses deste. Se um construtor possui $n$ parâmetros
+então serão geradas $n+1$ classes intermediárias. Cada uma delas recebe o valor de um parâmetro, e retorna
+a instância da próxima classe, que recebe o próximo parâmetro e retorna outra classe, etc. A classe que
+receber o último parâmetro retorna uma instância da que possui o nome do construtor.
+
+Como o construtor de tipo \textit{Gato} possui dois parâmetros, serão necessárias três classes: \textit{GatoF1}
+que recebe em \textit{apply} o primeiro parâmetro (\textit{String}) e retorna uma instância de \textit{GatoF1F2},
+\textit{GatoF1F2} que recebe o segundo parâmetro do construtor (\textit{Integer}), e \textit{Gato}, cuja instância é retornada por \textit{GatoF1F2} em seu método \textit{apply}.
+
+Uma vez que já definimos uma maneira de se traduzir tipos algébricos, e também uma classe abstrata
+\textit{Fun} que força suas subclasses a implementarem o método \textit{apply}, podemos utilizar esta mesma
+estrutura para implementar de uma maneira uniforme a tradução de funções.
+
+Vamos utilizar como exemplo a função \textit{map}, que através de uma função, mapeia uma lista de elementos de tipo \textit{a}, para uma lista de elementos de tipo \textit{b}. Uma implementação desta é mostrada na
+Fig.~\ref{fig:funcao-map}.
+
+\begin{figure}[ht]
+	\progfig{
+	\{ \\
+	map :: (a -> b) -> [a] -> [b] \\
+	map f [] = [] \\
+	map f (x:xs) = f x : map f xs \\
+	\}
+	}
+	\caption{Um exemplo de implementação da função \textit{map}}
+	\label{fig:funcao-map}
+\end{figure}
+
+A tradução da função \textit{map} depende de uma implementação de lista. Como o tipo lista é comumente
+utilizado, optamos por definí-lo de uma forma simplificada, fora da maneira descrita para tipos algébricos,
+visando a facilidade na interoperabilidade com outras linguagens. A tradução do tipo lista é mostrada na
+ Fig.~\ref{fig:tipo-lista}.
+
+\begin{figure}[ht]
+	\progfig{
+	abstract public class Lista<A> \{\} \\
+	public class Nil<A> extends Lista<A> \{\} \\
+	pu\=blic class Cons<A> extends Lista<A> \{ \\
+		\>public A x; \\
+		\>public Lista<A> xs; \\
+	\\
+		\>pu\=blic Cons(A x, Lista<A> xs) \{ \\
+		\>\>this.x = x; \\
+		\>\>this.xs = xs; \\
+		\>\} \\
+	\}
+	}
+	\caption{Tradução do tipo lista para classes Java}
+	\label{fig:tipo-lista}
+\end{figure}
+
+Na tradução dos tipos algébricos, se um construtor possui $n$ parâmetros, será necessária uma
+classe a mais ($n+1$), pois esta representa a instância do construtor, que deve conter todos os parâmetros.
+Entretanto, na tradução de funções, se uma função possui $n$ argumentos, serão necessárias $n$ classes,
+porque a última apenas retorna o resultado da computação da expressão.
+
+A primeira classe da tradução da função \textit{map} será chamada de \textit{MapF} devido à junção dos nomes
+da função e de seu primeiro parâmetro \footnote{A convenção de nomenclatura de identificadores chamada de
+\textit{camel case} é utilizada, onde ``nome de uma classe'' vira o identificador ``nomeDeUmaClasse''. No
+caso do identificador ser o nome de uma classe, utiliza-se a primeira letra em maiúscula.}.
+A classe \textit{MapF} recebe em \textit{apply} a instância de uma classe que estenda \textit{Fun<A,B>} 
+e retorna uma instância da classe \textit{MapFX}.
+
+\progb{
+	pu\=blic class MapF<A, B> extends Fun< Fun<A, B>, MapFX<A, B> > \{ \\
+		\>pu\=blic MapFX<A, B> apply(Fun<A, B> x) \{ \\
+			\>\>return new MapFX<A, B>(x); \\
+		\>\} \\
+	\}
+}
+
+\begin{figure}[h]
+	\progfig{
+		pu\=blic class MapFX<A, B> extends Fun<Lista<A>, Lista<B> > \{\\
+			\>public Fun<A, B> f;\\
+			\\
+			\>pu\=blic MapFX(Fun<A, B> x) \{\\
+				\>\>this.f = x;\\
+			\>\}\\
+		\\
+			\>public Lista<B> applyFor(Nil<A> x) \{\\
+				\>\>return new Nil<B>();\\
+			\>\}\\
+			\\
+			\>public Lista<B> applyFor(Cons<A> lista) \{\\
+				\>\>return new C\=ons<B>(f.apply(lista.x), \\
+				\>\>\>(new MapF<A, B>()).apply(f).apply(lista.xs));\\
+			\>\}\\
+		\\
+			\>public Lista<B> apply(Lista<A> x) \{\\
+				\>\>if\= (x instanceof Nil)\\
+					\>\>\>return applyFor((Nil<A>) x);\\
+				\>\>else if (x instanceof Cons)\\
+					\>\>\>return applyFor((Cons<A>) x);\\
+					\\
+				\>\>throw new RuntimeException("Unknown subtype for Lista");\\
+			\>\}\\
+		\}
+	}
+	
+	\caption{Implementação da segunda classe para a tradução de \textit{map}}
+	\label{fig:classe-mapfx}
+\end{figure}
+
+A segunda classe da tradução será chamada de \textit{MapFX}, que recebe através de \textit{apply} uma
+instância de lista com tipo genérico ``A'', e retorna uma instância de lista com tipo genérico ``B''.
+A tradução para esta classe é mostrada na Fig.~\ref{fig:classe-mapfx}.
+
+Cumpre salientar que as instâncias diretas de \textit{Lista} não existem por esta se tratar de uma classe 
+abstrata. Existem instâncias apenas de suas subclasses \textit{Nil} e \textit{Cons}.
+Como o método \textit{apply} recebe como parâmetro \textit{Lista}, precisaremos verificar de qual classe
+é a instância, e então chamar o método para a subclasse de Lista. O método \textit{applyFor} é um método
+sobrecarregado para cada construtor do tipo algébrico, enquanto o método \textit{apply} apenas verifica
+a classe da instância e executa a chamada ao método \textit{applyFor}, passando o parâmetro que recebeu.
+
+
+\section{Síntese}
+
+Neste capítulo descrevemos todas as ferramentas e linguagens utilizadas durante a fase de implementação
+do compilador fruto deste trabalho.
+Também descrevemos através de exemplos e explicações como resolvemos alguns dos problemas da tradução
+de um programa escrito em uma linguagem funcional para outro paradigma, que no caso do presente trabalho,
+é orientado a objeto.

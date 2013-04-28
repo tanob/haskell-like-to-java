@@ -1,0 +1,15 @@
+\select@language {brazil}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Sistema de tipos de Damas-Milner}}{28}{figure.listoftables.2.1}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Algoritmo $W$}}{29}{figure.listoftables.2.2}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Implementa\c c\~ao da classe de tipos $Monad$}}{34}{figure.listoftables.2.3}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Implementa\c c\~ao de um m\^onada para \textit {logs}}}{34}{figure.listoftables.2.4}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Exemplo de uso do m\^onada definido na Fig.~\ref {fig:monada-log}}}{35}{figure.listoftables.2.5}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Tipos de dados da m\'aquina virtual Java}}{39}{figure.listoftables.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Pseudo-c\'odigo do la\c co principal do interpretador da JVM}}{43}{figure.listoftables.3.2}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Exemplo de tipo de dado de enumera\c c\~ao para cores}}{57}{figure.listoftables.4.1}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Sa\IeC {\'\i }da do analisador sint\'atico para o exemplo da Fig.~\ref {fig:enum-cores}}}{57}{figure.listoftables.4.2}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Implementa\c c\~ao da fun\c c\~ao \textit {len}}}{58}{figure.listoftables.4.3}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Exemplo de sa\IeC {\'\i }da do analisador sint\'atico para a fun\c c\~ao \textit {len}}}{58}{figure.listoftables.4.4}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Um exemplo de implementa\c c\~ao da fun\c c\~ao \textit {map}}}{65}{figure.listoftables.4.5}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Tradu\c c\~ao do tipo lista para classes Java}}{66}{figure.listoftables.4.6}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Implementa\c c\~ao da segunda classe para a tradu\c c\~ao de \textit {map}}}{67}{figure.listoftables.4.7}

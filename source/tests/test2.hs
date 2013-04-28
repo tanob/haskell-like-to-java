@@ -1,0 +1,3 @@
+{
+data Assump = Id :>: Scheme
+}

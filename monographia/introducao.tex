@@ -1,0 +1,110 @@
+% introducao.tex
+\chapter{Introdução}
+
+As primeiras linguagens de programação foram desenvolvidas com o simples objetivo de poder controlar
+o comportamento dos computadores. Prova disto é que estas linguagens ofereciam diretamente, de uma forma
+não abstrata, as funcionalidades do \textit{hardware} em que iriam ser executadas.
+
+Desta forma, de linguagens de montagem primitivas surgiram várias linguagens de alto nível, começando com 
+FORTRAN \cite{fortran} em 1950. O número destas linguagens cresceu tão rapidamente que no início de 1980, para
+um melhor estudo, estas já eram agrupadas, devido às suas semelhanças, em famílias de linguagens \cite{hudak89}.
+
+A família de linguagens de programação funcionais, na qual a computação é o resultado da avaliação de expressões 
+(principalmente a aplicação de funções), tem atraído, atualmente, a atenção de pesquisadores tanto da área
+acadêmica como da indústria de desenvolvimento de \textit{software}.
+
+Uma das razões dessa atração, principalmente pelas linguagens funcionais puras e de avaliação preguiçosa,
+é que estas podem usufruir do poder de processamento dos processadores com múltiplos núcleos (processadores
+\textit{multicore}) \cite{meijer2008}. 
+O fato de serem puras diz respeito à ausência de efeito colateral, ou seja, a avaliação
+de uma expressão não influi no resultado da avaliação de outra expressão. Juntamente com isso, o fato de 
+ter uma avaliação preguiçosa permite que a avaliação dos parâmetros de uma expressão seja realizado somente
+quando necessário. Essas características fazem com que programas nestas linguagens sejam muito mais facilmente
+paralelizáveis do que em linguagens de paradigma imperativo \cite{hudak89}.
+
+Embora as linguagens funcionais resolvam vários problemas, estas muitas vezes necessitam utilizar a interface
+de funções externas (\textit{Foreign Function Interface} - FFI\sigla{FFI}{\textit{Foreign Function Interface} - Interface de funções externas}) para acessar alguma funcionalidade de que
+não dispõem, como uma biblioteca de outra linguagem, ou ter acesso direto a serviços do sistema operacional.
+A importância de boas FFIs é largamente reconhecida atualmente, principalmente
+frente à tendência de desenvolvimento baseado em componentes escritos em várias linguagens \cite{benton1999}.
+
+Geralmente as linguagens funcionais possuem alguma maneira de chamar funções externas em C, porém, trabalhar
+diretamente com uma linguagem de mais baixo nível, que não tenha um sistema de tipos seguro e sem um coletor
+de lixo nunca irá ser trivial ou elegante \cite{benton1999}. 
+Um dos motivos da baixa adoção de linguagens funcionais é a falta de uma maneira fácil destas interoperarem
+com outras linguagens \cite{smlj}.
+
+A interoperabilidade entre linguagens é de grande interesse, como mostra o sucesso das plataformas .NET
+e Java, respectivamente da Microsoft e da Sun Microsystems. Os projetistas de linguagens de programação
+demonstram isto através de linguagens como SML$\sharp$, Mondrian e Scala \cite{smlnet,mondrian,scala}. 
+Todas estas linguagens
+têm a interoperabilidade com outras linguagens como sua funcionalidade principal \cite{matthews2007}.
+Alguns dos motivos do grande interesse por máquinas virtuais são a explosão da web, grandes sistemas
+desenvolvidos com base em várias linguagens e o suporte a código legado. A máquina virtual resolve estes
+problemas, pois é uma plataforma onde várias linguagens podem interoperar.
+
+A possibilidade de escrever algoritmos de forma concisa, ou então facilmente paralelizar a execução 
+destes algoritmos, demonstra alguns dos maiores poderes das linguagens funcionais.
+Através da execução de uma linguagem funcional sobre a arquitetura de uma máquina virtual
+poderíamos obter os benefícios da portabilidade, de termos um sistema
+de tipos comum entre as linguagens, assim como também a segurança proporcionada pela \textit{sandbox}, que
+protege o sistema hospedeiro durante a execução do programa.
+
+\section{Motivação}
+
+Como vimos na seção anterior, é crescente o número de linguagens de programação que baseiam a sua execução 
+sobre máquinas virtuais. Sobre a máquina virtual Java temos como exemplo os projetos para rodar Python (Jython) \cite{jython}, Ruby (JRuby) \cite{jruby}, recentemente Scala, e centenas de outras linguagens \cite{jvmlangs}.
+
+A máquina virtual Java \cite{jvmspec} executa programas binários na forma de \textit{bytecodes} Java. 
+Embora esta máquina virtual tenha sido desenvolvida para a linguagem de programação Java, outras linguagens 
+de programação podem ser executadas sobre esta.
+
+A plataforma Java foi escolhida por diversas razões, dentre elas:
+
+\begin{itemize}
+	\item há pouco tempo teve seu código-fonte aberto, sendo possível para qualquer pessoa estudá-lo;
+	\item a máquina virtual Java é uma das mais populares;
+	\item a linguagem Java é a mais popular\footnote{O índice da comunidade de programação TIOBE leva em conta o número de pessoas que utilizam a linguagem, assim como o número de cursos e de parceiros (\textit{third party vendors}).} segundo TIOBE \cite{tiobe}, sendo mais popular que a linguagem C.
+\end{itemize}
+
+O propósito deste trabalho é o desenvolvimento de uma base que possibilite futuras pesquisas sobre a 
+interoperabilidade entre linguagens de diferentes paradigmas, principalmente entre os paradigmas funcional 
+e orientado a objeto.
+Como parte dessa base, foi desenvolvido um compilador de uma linguagem funcional que gera
+\textit{bytecodes} Java.
+
+\section{Objetivos}
+
+O objetivo deste trabalho é implementar um compilador que permita o estudo dos problemas envolvidos na geração
+de código funcional para a máquina virtual Java, assim como a interoperabilidade entre as linguagens
+do paradigma funcional e orientado a objeto.
+Essa implementação envolve:
+
+\begin{itemize}
+	\item a definição de uma linguagem funcional estrita e sem sobrecarga, baseada na sintaxe de Haskell;
+	\item a construção de um compilador, onde o \textit{frontend} é composto por um analisador sintático e 
+um inferidor de tipos, e cujo \textit{backend} gera \textit{bytecodes} Java;
+	\item o estudo dos possíveis problemas de interoperabilidade entre o paradigma funcional e o orientado
+a objeto.
+\end{itemize}
+
+Em relação a geração de código, serão abordadas apenas as representações de tipos de dados algébricos
+e um estudo inicial sobre a tradução de funções.
+
+\section{Organização do Trabalho}
+
+Este trabalho, dividido em cinco capítulos, apresenta primeiramente os conceitos estudados durante o seu
+desenvolvimento, seguido da descrição da ferramenta desenvolvida, os resultados obtidos e as conclusões.
+
+No capítulo dois, é apresentada uma introdução à programação funcional, suas características, como
+funciona a inferência de tipos, e também um pouco da evolução das linguagens deste paradigma de desenvolvimento
+de \textit{software}.
+
+O capítulo três trata da máquina virtual Java, descrevendo suas características, \textit{opcodes}, tipos de
+dados, modelo de execução e também sobre seus arquivos de \textit{bytecodes} (arquivos \textit{.class}).
+
+No quarto capítulo, é descrita a ferramenta desenvolvida, as bibliotecas utilizadas e
+as traduções feitas entre as expressões da linguagem funcional deste trabalho para construções 
+na linguagem Java.
+
+No quinto e último capítulo, são apresentadas as conclusões e as sugestões de trabalhos futuros.

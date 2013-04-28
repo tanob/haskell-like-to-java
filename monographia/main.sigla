@@ -1,0 +1,15 @@
+API& \textit {Application Programming Interface} - Interface de Programação de Aplicativos\TSStextpagesep{}\TSSThePage{39}\\
+BNF& Backus Naur \textit {Form} - Forma de Backus Naur\TSStextpagesep{}\TSSThePage{50}\\
+FFI& \textit {Foreign Function Interface} - Interface de funções externas\TSStextpagesep{}\TSSThePage{11}\\
+GC& \textit {Garbage Collector} - Coletor de Lixo\TSStextpagesep{}\TSSThePage{39}\\
+GHC& Glasgow Haskell \textit {Compiler} - Compilador Haskell de Glasgow\TSStextpagesep{}\TSSThePage{51}\\
+JAR& Java \textit {ARchive} - Arquivo Java\TSStextpagesep{}\TSSThePage{62}\\
+JDK& Java \textit {Development Kit} - Kit de desenvolvimento Java\TSStextpagesep{}\TSSThePage{62}\\
+JNI& \textit {Java Native Interface} - Interface nativa para Java\TSStextpagesep{}\TSSThePage{39}\\
+JVM& \textit {Java Virtual Machine} - Máquina virtual Java\TSStextpagesep{}\TSSThePage{38}\\
+LCF& \textit {Logic for Computable Functions} - Lógica para funções computáveis\TSStextpagesep{}\TSSThePage{20}\\
+Lisp& \textit {LISt Processor} - Processador de listas\TSStextpagesep{}\TSSThePage{17}\\
+ML& \textit {Meta-language} - Meta linguagem\TSStextpagesep{}\TSSThePage{20}\\
+opcode& \textit {Operation Code} - Código de instrução\TSStextpagesep{}\TSSThePage{44}\\
+PC& \textit {Program Counter} - Contador de programa\TSStextpagesep{}\TSSThePage{41}\\
+Yacc& \textit {Yet Another Compiler Compiler} - Ainda outro compilador de compiladores\TSStextpagesep{}\TSSThePage{50}\\

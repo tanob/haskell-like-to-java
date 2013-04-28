@@ -1,0 +1,461 @@
+% capitulo2.tex
+
+\chapter{Máquina Virtual Java}
+
+A máquina virtual Java (\textit{Java Virtual Machine} - JVM \sigla{JVM}{\textit{Java Virtual Machine} - Máquina virtual Java}) é o principal componente do ambiente Java,
+sendo o responsável pelo pequeno tamanho de seu código compilado, e também da independência de sistema
+operacional e de hardware \cite{jvmspec}. Existem versões da JVM para diversas arquiteturas e sistemas
+operacionais.
+
+Assim como um computador real, a JVM possui um conjunto de instruções (\textit{opcodes}) e manipula
+áreas na memória durante o tempo de execução. Portanto, ela não tem conhecimento algum sobre a 
+linguagem de programação Java \cite{Gos00} (embora tenha sido projetada para ela), conhece apenas o formato
+binário dos seus arquivos de entrada, os arquivos \textit{.class}. Desta forma, qualquer linguagem
+que tenha funcionalidades capazes de serem expressas no formato dos arquivos \textit{.class} poderá
+ser executada na JVM. Várias linguagens de diversos paradigmas podem ser encontrados na lista de 
+Robert Tolksdorf \cite{jvmlangs}.
+
+\section{Características Gerais}
+
+A arquitetura da JVM é baseada em pilhas (\textit{stacks}), onde cada linha de execução (\textit{thread}) 
+possui a sua.
+
+A segurança na máquina virtual é garantida pela compilação onde os tipos corretos são determinados,
+como também em tempo de execução pelo gerenciador de segurança. 
+
+A JVM restringe as operações utilizando
+quatro mecanismos interligados: o carregador de classes, o verificador de \textit{bytecode}, as verificações
+realizadas em tempo de execução e o gerenciador de segurança. As três primeiras são relacionadas com a
+garantia dos tipos estarem corretos (\textit{type correctness}) como também com a integridade do sistema
+de \textit{runtime}. O gerenciador de segurança é utilizado para controlar o acesso a determinadas
+funções no sistema. Essas quatro técnicas utilizadas para restringir a execução de um programa na JVM
+são coletivamente chamadas de Java \textit{sandbox}.
+
+Para possibilitar que programas acessem as funcionalidades do sistema operacional hospedeiro, existem
+métodos que podem ser marcados como nativos. Métodos não-Java ou nativos são métodos implementados
+em linguagens como C, C++, ou linguagem de montagem, e então compilados para um determinado processador
+alvo. A desvantagem é que o programa com métodos nativos perde a independência do sistema hospedeiro que 
+a JVM proporciona, assim como do \textit{hardware} da máquina. Uma das maneiras mais conhecidas para
+se implementar métodos nativos é através da \textit{Java Native Interface} - JNI \sigla{JNI}{\textit{Java Native Interface} - Interface nativa para Java} \cite{insidejvm}.
+
+O ambiente Java é composto não apenas pela máquina virtual e pela linguagem de programação Java, mas
+também pelo formato binário dos arquivos \textit{.class} e por um conjunto de bibliotecas padrão que
+sempre acompanham a máquina virtual. Essas bibliotecas compõem a chamada \textit{Application Programming 
+Interface} - API \sigla{API}{\textit{Application Programming 
+Interface} - Interface de Programação de Aplicativos} Java e, devido ao fato de oferecerem diversas facilidades como classes para acesso à internet,
+conteúdo multimídia, componentes para interfaces gráficas, etc., são um fator importante na grande adoção
+da plataforma Java.
+
+Outra razão que contribui para a segurança dos programas na JVM é que não há uma maneira de diretamente
+se manipular dados na memória, tampouco de se liberar memória alocada
+explicitamente. O mecanismo de \textit{garbage collector} - GC \sigla{GC}{\textit{Garbage Collector} - Coletor de Lixo} oferecido pela máquina virtual é responsável
+pela liberação da memória de objetos que não são mais referenciados no programa, evitando vários problemas
+que ocorrem em linguagens de programação como C e C++.
+
+\section{Tipos de Dados}
+
+A computação na JVM ocorre através de operações sobre tipos de dados, ambos definidos na especificação.
+Os tipos de dados podem ser divididos em tipos primitivos e tipos referência (\textit{reference}).
+Variáveis de tipos primitivos guardam valores primitivos. Contudo, variáveis de tipo referência têm
+como valor uma referência para objetos, mas não são objetos por si só.
+Os tipos disponíveis na JVM podem ser vistos na Figura~\ref{fig:jvm-datatypes}.
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.8\textwidth]{imgs/java_data_types.jpg}
+	\caption{Tipos de dados da máquina virtual Java}	
+	\label{fig:jvm-datatypes}
+\end{figure}
+
+%\begin{figure}[h]
+% \def\captext{Caso de Uso Interface com o Usuário}
+% \newlength{\ancho}
+% \settowidth{\ancho}{Figura 3.1: \captext}
+%     \centering
+%     \includegraphics[width=0.90\textwidth]{imgs/java_data_types.jpg}
+%     \parbox{\ancho}{\caption{\captext}
+%     \makebox[\width]{Fonte: baseado em X.}}
+%     \label{interface}
+%\end{figure}
+
+Todos os tipos primitivos da linguagem Java são tipos primitivos na JVM. Embora o tipo $boolean$
+seja dito primitivo, o conjunto de instruções tem um suporte limitado a ele. Quando um compilador traduz
+código Java para \textit{bytecodes}, ele utiliza $int$s e $byte$s para representar dados $boolean$.
+Na máquina virtual $false$ é representado pelo inteiro zero, e $true$ por qualquer inteiro diferente de zero.
+Inteiros também são utilizados em operações envolvendo o tipo $boolean$. Matrizes de $boolean$ são representadas
+como matrizes de $byte$.
+
+Assim como na linguagem Java, os tipos primitivos da JVM possuem o mesmo intervalo de valores, independentemente
+de plataforma operacional ou do \textit{hardware} sendo utilizado. Embora os intervalos de valores sejam
+especificados, os tamanhos de cada tipo de dado não o são, ficando a critério de quem implementa
+a máquina virtual.
+
+A JVM trabalha com um tipo primitivo que não é disponibilizado ao programador da linguagem Java, o tipo
+$returnAddress$. Este tipo é utilizado na linguagem, na implementação de cláusulas $finally$.
+
+O tipo referência da JVM é chamado de $reference$. Valores deste tipo podem ser: de classe (\textit{class type}), 
+de interface (\textit{interface type}) e de matriz (\textit{array type}). Todos possuem como valores
+referências para objetos criados dinamicamente. Um outro valor de $reference$ é $null$, o qual
+indica que a variável não referencia nenhum objeto.
+
+Os intervalos dos tipos de dado da JVM são mostrados na tab.~\ref{tab:jvm-data-ranges}.
+
+\begin{table}[h]
+	\caption{Intervalo dos tipos de dados da máquina virtual Java}
+	\label{tab:jvm-data-ranges}
+	
+\begin{center}
+\begin{tabular}{ll}\hline\hline
+	\textbf{Tipo} & \textbf{Intervalo} \\
+	$byte$ & inteiro de 8-bits com sinal ($-2^7$ até $2^7 - 1$, inclusive) \\
+$short$ & inteiro de 16-bits com sinal ($-2^{15}$ até $2^{15} - 1$, inclusive) \\
+$int$ & inteiro de 32-bits com sinal ($-2^{31}$ até $2^{31} - 1$, inclusive) \\
+$long$ & inteiro de 64-bits com sinal ($-2^{63}$ até $2^{63} - 1$, inclusive) \\
+$char$ & caractere Unicode sem sinal de 16-bits ($0$ até $2^{16} - 1$, inclusive) \\
+$float$ &	ponto flutuante com precisão simples de 32-bits no padrão IEEE 754 \\
+$double$ & ponto flutuante com precisão dupla de 64-bits no padrão IEEE 754 \\
+$returnAddress$ & endereço de um \textit{opcode} dentro do mesmo método \\
+$reference$ & referência para um objeto na $heap$, ou $null$ \\
+\hline\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\section{Áreas de Memória}
+
+Na especificação da JVM são definidas várias áreas de memória. Algumas destas são alocadas quando a máquina
+virtual é inicializada e desalocadas quando a JVM termina a sua execução.
+Outras são alocadas juntamente na criação da \textit{thread}, e desalocadas com o término de sua execução.
+
+% O registrador PC
+A JVM suporta a execução de várias \textit{threads}, onde cada uma possui um registrador \textit{program counter} - PC \sigla{PC}{\textit{Program Counter} - Contador de programa}. Este registrador
+contém o endereço da instrução no método sendo executado no momento pela \textit{thread}, porém, se o método
+for nativo, o conteúdo do registrador é indefinido.
+
+Veremos em mais detalhes, nas próximas subseções, as principais áreas de memória da JVM.
+
+\subsection{Área de Métodos}
+
+Dentro de uma instância da JVM, as informações sobre os tipos carregados ficam armazenados em um local na
+memória chamado de área de métodos. Quando a máquina virtual carrega algum tipo, um carregador de classes
+(\textit{class loader}) localiza e carrega a classe, para que então algumas informações sejam extraídas.
+Estas informações extraídas são guardadas na área de métodos, mas a forma em que são armazenadas fica a 
+critério da implementação.
+
+Durante a execução da aplicação, a JVM irá fazer buscas nessas informações de tipos, e, por isso, essas
+informações devem estar armazenadas de uma forma otimizada para que as buscas sejam rápidas. 
+
+Como esta área de memória é compartilhada entre todas as \textit{threads} em execução pela JVM, o acesso às 
+estruturas de dados da área de métodos deve ser projetado para ser \textit{thread-safe}. Se duas
+\textit{threads} tentam utilizar uma classe que não está carregada, então a primeira que realizou a solicitação
+terá a prioridade de carregá-la, enquanto a outra espera.
+
+O tamanho da área de memória não precisa ser fixo. A máquina virtual pode expandir e contrair a área de métodos
+da maneira que a aplicação necessitar. Ainda com relação à memória da área de métodos, esta pode ser não
+continua \cite{jvmspec}.
+
+Durante a execução do programa, classes podem não ser mais referenciadas. Assim, as informações armazenadas
+na área de métodos podem ser liberadas por um \textit{garbage collector}, mantendo no mínimo possível o tamanho
+ocupado.
+
+Para cada tipo que a JVM carrega, uma tabela de símbolos (\textit{constant pool}) deve ser armazenada.
+Esta tabela é um conjunto de constantes que são usados pelo tipo, incluindo literais e referências
+simbólicas para tipos, campos e métodos. As entradas nessa tabela são acessadas através de um índice, assim
+como os elementos de uma matriz \cite{insidejvm}.
+
+\subsection{Heap}
+
+A \textit{heap} é a área de dados onde as instâncias de classes e as matrizes são alocadas.
+
+Assim como a área de métodos, a \textit{heap}: é compartilhada entre todas as \textit{threads} da JVM,
+bem como é criada na inicialização da máquina virtual, podendo ter um tamanho fixo ou ser expandida/contraída 
+sob demanda, não precisando a sua área de memória ser continua.
+
+Embora a JVM tenha uma instrução para alocar memória na \textit{heap} para um novo objeto, não há uma instrução
+que libera a memória alocada por este objeto. Fica sob responsabilidade da implementação da JVM a liberação
+da memória ocupada por objetos que não são mais referenciados na aplicação, sendo que, normalmente,
+a máquina virtual utiliza algum algoritmo de \textit{garbage collection} para a liberação da memória.
+
+\subsection{Pilha da \textit{Thread}}
+
+Em conjunto com a criação de uma \textit{thread} é criada uma pilha (JVM \textit{stack}), que contém
+páginas (\textit{frames}). As páginas dessa pilha atuam de maneira similar aos registros de ativação de linguagens,
+como por exemplo a linguagem C. A função da página é armazenar os parâmetros, as variáveis locais, a pilha 
+de operandos e alguns dados próprios.
+
+As variáveis locais na página estão organizadas em uma matriz de palavras (\textit{words}), onde o primeiro
+índice é zero. Palavra é a unidade básica de tamanho para os tipos de dados na JVM. Pela especificação
+da JVM, uma palavra deve ter o tamanho necessário para armazenar um valor de tipo $byte$, $short$, $int$, $char$,
+$float$, $returnAddress$, ou $reference$. Duas palavras devem comportar um $long$ ou $double$. O tamanho de uma
+palavra geralmente é definido como sendo o tamanho de um ponteiro nativo na plataforma do hospedeiro.
+Valores de tipo $byte$, $short$, e $char$ são convertidos para $int$ antes de serem colocadas nas variáveis locais.
+Valores de tipo $long$ e $double$ ocupam dois lugares consecutivos na matriz.
+
+Assim como as variáveis locais, a pilha de operandos na página é uma matriz de palavras. Porém, a pilha de 
+operandos não é acessada através de índices, mas, através de operações de empilhar e desempilhar.
+
+Alguns dados próprios na página da pilha da JVM são utilizados para ajudar no acesso a dados que estão na
+tabela de símbolos, bem como para retornar o resultado do método a quem o chamou, ou, em casos de término
+por exceção, guardar informações sobre a exceção que ocorreu.
+
+A máquina virtual executa apenas duas operações na pilha: empilha e desempilha páginas. Quando um método
+é chamado, é criada e empilhada uma nova página na pilha, e esta torna-se a página atual.
+Um método pode terminar de forma normal, quando termina a sua computação, ou de forma repentina,
+com o lançamento de uma exceção. De ambas maneiras, a máquina virtual desempilha a página do método sendo
+executado, e descarta-o. Então, a página do método anterior, que está no topo da pilha, passa a ser a página atual.
+
+Todos os dados na pilha da \textit{thread} são privados àquela \textit{thread}. Desta forma, o acesso a
+variáveis locais nos métodos não precisa ser sincronizado, pois as variáveis locais estarão alocadas em
+uma página na pilha da \textit{thread} que chamou o método.
+
+Assim como a área de métodos e a \textit{heap}, a área de memória em que está a pilha ou as páginas não
+precisa ser continua.
+
+\subsection{Pilha de Métodos Nativos}
+
+Quando uma \textit{thread} chama um método nativo, surge um novo mundo no qual as estruturas e as restrições de
+segurança da JVM não limitam mais o programador. Um método nativo pode acessar as áreas de memória discutidas
+nas seções anteriores (dependendo da interface de métodos nativos que o implementador oferecer).
+O programador poderá utilizar os registradores nativos do processador, alocar memória diretamente do sistema
+hospedeiro, etc.
+
+Qualquer interface de métodos nativos irá usar algum tipo de pilha desses métodos. Quando uma \textit{thread}
+chama um método, a máquina virtual cria uma nova página e empilha na pilha da JVM. Entretanto, quando uma
+\textit{thread} chama um método nativo, a pilha da JVM não é utilizada. Ao invés de empilhar uma nova página,
+a JVM irá simplesmente ligar dinamicamente o módulo que oferece o método, e chamá-lo.
+
+Assim como em outras áreas de memória, a memória ocupada pelas pilhas de métodos nativos não precisa ser
+de um tamanho fixo, podendo expandir/contrair de acordo com a necessidade da aplicação.
+
+\section{Conjunto de Instruções (\textit{opcodes})}
+\label{sec:jvm-opcodes}
+
+Cada instrução da JVM consiste em um código de operação de um byte (justificando o nome de \textit{bytecode}),
+podendo necessitar de zero ou mais operandos. Quando operandos são necessários, após o byte da instrução seguem um ou mais bytes que podem representar o índice de uma variável na matriz de variáveis locais, um valor imediato ou uma referência à tabela de símbolos da classe \cite{jarismar2003}. Um pseudo-código do laço principal do
+interpretador da JVM, ignorando exceções, é mostrado na Figura~\ref{fig:loop-jvm-interpreter}.
+
+\begin{figure}[h]
+\progfig{
+do \{\= \\
+     \>busca um \textit{opcode}; \\
+     \>if (\textit{opcode} exige operandos) busca operandos; \\
+     \>executa a ação do \textit{opcode} \\
+\} while (tem mais a fazer); \\
+}
+	\caption{Pseudo-código do laço principal do interpretador da JVM}
+	\label{fig:loop-jvm-interpreter}
+\end{figure}
+% TODO fonte jvmspec secao 3.11
+
+Na maioria das instruções com tipos, o tipo ao qual a instrução se aplica é explicito no mnemônico do
+\textit{opcode} \sigla{opcode}{\textit{Operation Code} - Código de instrução} pelas letras i, l, s, b, c, f, d, a, que correspondem, respectivamente, aos tipos $int$, $long$,
+$short$, $byte$, $char$, $float$, $double$ e $reference$. Estas letras são utilizadas por toda a JVM,
+e são chamadas de descritores de tipos.
+Instruções onde o tipo não é ambíguo não possuem
+uma letra descrevendo o tipo no seu mnemônico. Por exemplo, $arraylength$ sempre tem como operando um objeto
+que é uma matriz. Algumas instruções, como $goto$, possuem seus operandos sem tipo.
+
+Nas subseções a seguir veremos as principais categorias de instruções que a JVM provê.
+
+\subsection{Instruções de Variáveis Locais e Pilha de Operandos}
+
+Como a JVM é uma máquina baseada em pilhas, quase todas as suas instruções são relacionadas à pilha de operandos.
+A maioria das instruções empilham e desempilham valores, ou executam ambas operações.
+
+As instruções que transferem valores entre a pilha de operandos e as variáveis locais são:
+
+\begin{itemize}
+	\item Carregam uma variável local na pilha de operandos: \textit{iload}, \textit{iload\_<n>}, 
+\textit{lload}, \textit{lload\_<n>}, \textit{fload}, \textit{fload\_<n>}, \textit{dload}, \textit{dload\_<n>}, \textit{aload}, \textit{aload\_<n>};
+
+	\item Armazenam um valor da pilha de operandos em uma variável local: \textit{istore}, \textit{istore\_<n>}, \textit{lstore},
+\textit{lstore\_<n>}, \textit{fstore}, \textit{fstore\_<n>}, \textit{dstore}, \textit{dstore\_<n>}, \textit{astore}, \textit{astore\_<n>};
+
+	\item Carregam uma constante na pilha de operandos: \textit{bipush}, \textit{sipush}, \textit{ldc}, \textit{ldc\_w}, \textit{ldc2\_w},
+\textit{aconst\_null}, \textit{iconst\_m1}, \textit{iconst\_<i>}, \textit{lconst\_<l>}, \textit{fconst\_<f>}, \textit{dconst\_<d>};
+
+	\item Ganha acesso a mais variáveis locais usando um índice maior: \textit{wide}.
+\end{itemize}
+
+As instruções acima que terminam com ``<n>'' indicam instruções que oferecem operandos implícitos, não sendo
+necessário que o operando seja buscado ou armazenado. Por exemplo, \textit{iload\_0} empilha a variável local
+que está no índice zero na pilha de operandos, o que é equivalente a instrução \textit{iload 0}. Da mesma forma,
+istore\_0 é equivalente a \textit{store 0}, e ambos armazenam na variável local de índice zero o valor que está 
+no topo da pilha de operandos.
+
+Existem três maneiras de se empilhar constantes: o valor da constante estar implícito no \textit{opcode}
+ (\textit{iconst\_1} empilha a constante um),
+o valor da constante ser o operando do \textit{opcode} (\textit{iconst 1}), ou então a constante vir da tabela de símbolos (\textit{ldc}). Como em alguns algoritmos é comum inicializarmos alguma variável com o valor $-1$, os
+projetistas da JVM incluíram o \textit{opcode} \textit{iconst\_m1}.
+
+O índice para endereçar variáveis locais é de 8-bits, o que limita o número máximo dessas para apenas 256.
+A instrução \textit{wide} pode estender o índice com outro de 8-bits, elevando o número máximo de variáveis
+locais para 65536. Este \textit{opcode} precede à instrução que deseja acessar alguma variável local acima
+do limite de 256.
+
+\begin{table}[h]
+	\caption{Instruções que manipulam diretamente a pilha de operandos}
+	\label{tab:stackops}
+
+	\begin{center}
+	\begin{tabular}{ll}\hline\hline
+		\textbf{Instrução} & \textbf{Descrição} \\
+\textit{nop} & não executa nada \\
+\textit{pop} & desempilha a palavra do topo da pilha de operandos \\
+\textit{pop2} & desempilha as duas palavras do topo da pilha de operandos \\
+\textit{swap} & troca as duas palavras no topo da pilha \\
+\textit{dup} & duplica o operando no topo da pilha \\
+\textit{dup2} & duplica os dois operandos no topo da pilha \\
+		\hline\hline
+	\end{tabular}
+	\end{center}
+\end{table}
+
+Embora a maioria das instruções na JVM opere sobre um tipo, algumas instruções manipulam a pilha de operandos
+de forma independente de tipo. Estas instruções são mostradas na tab.~\ref{tab:stackops}.
+
+\subsection{Instruções Aritméticas}
+
+As instruções aritméticas computam um resultado que é tipicamente uma função de dois valores que estão na pilha
+de operandos, empilhando o resultado nesta. Não há suporte direto para operações aritméticas envolvendo valores
+de tipos \textit{byte}, \textit{short}, \textit{char} e \textit{boolean}. Estes tipos são convertidos para
+\textit{int} antes de serem colocados na pilha de operandos. As instruções aritméticas são as seguintes:
+
+\begin{itemize}
+	\item Adição: Add: iadd, ladd, fadd, dadd;
+	\item Subtração: isub, lsub, fsub, dsub;
+	\item Multiplicação: imul, lmul, fmul, dmul;
+	\item Divisão: idiv, ldiv, fdiv, ddiv;
+	\item Resto: irem, lrem, frem, drem;
+	\item Troca de sinal: ineg, lneg, fneg, dneg;
+	\item Deslocamento: ishl, ishr, iushr, lshl, lshr, lushr;
+	\item OR bit a bit: ior, lor;
+	\item AND bit a bit: iand, land;
+	\item XOR bit a bit: ixor, lxor;
+	\item Incremento de variável local: iinc;
+	\item Comparação: dcmpg, dcmpl, fcmpg, fcmpl, lcmp.
+\end{itemize}
+
+A JVM não indica a existência de \textit{overflow} durante operações com inteiros.
+As únicas operações com inteiros que podem lançar uma exceção são as operações de divisão entre inteiros
+(\textit{idiv} e \textit{ldiv}) e as instruções de resto inteiro (\textit{irem} e \textit{lrem}),
+as quais lançam uma exceção \textit{ArithmeticException} se o divisor for zero.
+
+\subsection{Instruções de Conversão de Tipos}
+
+A JVM suporta as seguintes conversões númericas:
+
+\begin{itemize}
+	\item \textit{int} para \textit{long} (\textit{i2l}), \textit{float} (\textit{i2f}) ou \textit{double} (\textit{i2d});
+	\item \textit{long} para \textit{float} (\textit{l2f}) ou \textit{double} (\textit{l2d});
+	\item \textit{float} para \textit{double} (\textit{f2d}).
+\end{itemize}
+
+Estas conversões são utilizadas pois o programador explicitamente faz uma conversão de tipo no seu programa,
+ou então ocorre implicitamente através da máquina virtual, de modo a suprir a falta de algumas operações com
+outros tipos númericos.
+
+\subsection{Criação e Manipulação de Objetos}
+
+Embora tanto instâncias de classes como matrizes sejam objetos, a JVM as cria e manipula de formas distintas:
+
+\begin{itemize}
+	\item Cria uma nova instância de uma classe: \textit{new};	
+	\item Cria uma nova matriz: \textit{newarray}, \textit{anewarray}, \textit{multianewarray};
+	\item Acessa campos de classes (\textit{static fields}) e atributos de instâncias: \textit{getfield}, \textit{putfield}, \textit{getstatic}, \textit{putstatic};
+	\item Carrega um item de uma matriz na pilha de operandos: \textit{baload}, \textit{caload}, \textit{saload}, \textit{iaload}, \textit{laload}, \textit{faload}, \textit{daload}, \textit{aaload};
+	\item Armazenam um valor da pilha de operandos como um item de uma matriz: \textit{bastore}, \textit{castore}, \textit{sastore}, \textit{iastore}, \textit{lastore}, \textit{fastore}, \textit{dastore}, \textit{aastore};
+	\item Coloca na pilha de operandos o tamanho da matriz: \textit{arraylength};
+	\item Verifica propriedades de instâncias de classes e matrizes: \textit{instanceof}, \textit{checkcast}.
+\end{itemize}
+
+\subsection{Instruções de Transferência de Controle}
+
+As instruções de transferência de controle, condicional ou incondicionalmente, fazem com que a JVM
+pule para outras posições no método, continuando com a sua execução. São elas:
+
+\begin{itemize}
+	\item Condicional: \textit{ifeq}, \textit{iflt}, \textit{ifle}, \textit{ifne}, \textit{ifgt}, \textit{ifge}, \textit{ifnull}, \textit{ifnonnull}, \textit{if\_icmpeq}, \textit{if\_icmpne}, \textit{if\_icmplt}, \textit{if\_icmpgt}, \textit{if\_icmple}, \textit{if\_icmpge}, \textit{if\_acmpeq}, \textit{if\_acmpne};
+	\item Incondicional: \textit{goto}, \textit{goto\_w}, \textit{jsr}, \textit{jsr\_w}, \textit{ret};
+	\item Para suportar a construção \textit{switch}: \textit{tableswitch}, \textit{lookupswitch}.
+\end{itemize}
+
+\subsection{Instruções de Chamada e Retorno de Métodos}
+
+As seguintes instruções executam chamadas a métodos:
+
+\begin{itemize}
+	\item \textit{invokevirtual} chama um método em um objeto;
+	\item \textit{invokeinterface} chama um método que é implementado por uma interface, buscando a implementação correta do objeto a ser chamada em tempo de execução;
+	\item \textit{invokespecial} chama um método de um objeto que necessite de um tratamento especial, seja
+um método de inicialização de uma instância, um método privado, ou um método da classe pai (\textit{super});
+	\item \textit{invokestatic} chama um método estático em uma classe.
+\end{itemize}
+
+As instruções que retornam os resultados nos métodos são distinguidas pelo tipo de retorno. São elas:
+\textit{ireturn} (usado em tipos \textit{boolean}, \textit{byte}, \textit{char}, \textit{short}, ou \textit{int}),
+\textit{lreturn}, \textit{freturn}, \textit{dreturn} e \textit{areturn}. Para métodos \textit{void}, que
+não retornam nenhum resultado, métodos inicializadores de instâncias, classes ou interfaces, é utilizada
+a instrução \textit{return}.
+
+\subsection{Instruções de Manipulação de Exceções}
+
+Uma exceção é lançada programaticamente usando a instrução \textit{athrow}. Exceções também podem ser lançadas
+por várias instruções da JVM se uma condição anormal for detectada.
+
+Blocos \textit{try \ldots catch} podem ter um bloco \textit{finally}, cujas instruções são executadas
+indiferentemente de haver uma exceção ou não. A implementação de \textit{finally} pela JVM utiliza
+as instruções \textit{jsr}, \textit{jsr\_w}, e \textit{ret}.
+
+\subsection{Instruções para Sincronização}
+
+A sincronização de sequências de instruções é tipicamente utilizada nos métodos com o modificador \textit{synchronized} da linguagem Java. A JVM oferece as instruções \textit{monitorenter} e 
+\textit{monitorexit} para suportar tal construção da linguagem.
+
+\section{Execução}
+
+A JVM inicia a execução de uma aplicação chamando o método \textit{main} de uma classe, cuja assinatura
+é mostrada abaixo, onde \textit{args} são os parâmetros passados para a aplicação:
+
+\progb{
+	public static void main(String[] args)
+}
+
+A execução do método \textit{main} ocorre na \textit{thread} principal, porém, antes da execução,
+a JVM realiza a ligação e inicialização da classe. 
+
+A ligação envolve o processo de verificação, preparação e, opcionalmente, resolução.
+
+O passo de verificação assegura que a representação carregada da classe a ser executada está semanticamente 
+correta. Se algum problema for detectado durante esta fase, um erro é lançado.
+
+A preparação envolve a alocação de espaço para as estruturas de dados que são utilizadas internamente pela 
+máquina virtual, como tabelas de métodos.
+
+Resolução é o processo de verificar as referências simbólicas para as outras classes e interfaces, carregando-as
+e verificando se as referências estão corretas.
+
+A inicialização da classe consiste na execução dos inicializados estáticos da classe, de acordo com a ordem no
+programa (\textit{textual order}). Porém, antes da inicialização da classe, sua classe pai deve ser inicializada,
+assim como todas as outras classes que estão acima na hierarquia de classes. No caso mais simples, a classe pai
+será Object (\textit{java.lang.Object}).
+
+Após todos esses passos, o método \textit{main} é executado.
+
+\section{Especificação dos Arquivos \textit{.class}}
+\label{sec:spec-class}
+
+O arquivo \textit{.class} é um arquivo binário, em um formato definido para que programas possam ser executados
+na JVM, de forma independente de plataforma e da implementação da máquina virtual. Cada arquivo
+\textit{.class} contém a descrição completa de uma, e somente uma, classe ou interface Java.
+
+Os dados são armazenados sequencialmente no arquivo, sem espaçamento (\textit{padding}) ou alinhamento
+(\textit{alignment}) entre eles. Esta falta de espaçamento reforça o cuidado dos projetistas da JVM em manter
+o \textit{bytecode} compacto.
+Os dados dos itens das estruturas de dados que representam a classe/interface que ocuparem mais de um \textit{byte} são divididos e organizados na ordem \textit{big-endian}
+\footnote{Neste formato, os bytes de maior ordem ficam nas primeiras posições, o caso contrário é chamado de
+\textit{little-endian}.}.
+
+O presente trabalho não irá descrever a estrutura dos arquivos \textit{.class}, visto que um extenso estudo
+sobre o tema pode ser encontrado em \citeonline{jarismar2003}.

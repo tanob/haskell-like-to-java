@@ -1,0 +1,47 @@
+\chapter{Conclusão}
+
+Este trabalho teve como objetivo o desenvolvimento de uma base que possibilite futuras pesquisas sobre
+a interoperabilidade entre linguagens de diferentes paradigmas e dos problemas envolvidos na tradução,
+principalmente entre os paradigmas funcional e orientado a objeto.
+Como parte dessa base, foi desenvolvido um compilador de uma linguagem funcional que gera \textit{bytecodes} Java.
+
+A implementação de um analisador sintático através de uma linguagem funcional com o uso de operadores 
+monádicos é elegante, fácil e extremamente flexível. O código final é muito semelhante à gramática da
+linguagem, facilitando a adição de novas funcionalidades e a correção de problemas na implementação.
+
+Durante o desenvolvimento das traduções, foram notadas semelhanças entre os tipos básicos da linguagem 
+funcional e os de Java, dentre elas: os tipos numéricos são muito próximos, \textit{strings}
+são vetores imutáveis de caracteres e nenhuma das linguagens possui tipo explícito de ponteiro.
+
+O suporte a polimorfismo paramétrico (\textit{generics}) presente na JVM a partir da versão 5 facilitou 
+bastante a tradução das declarações, além de evitar a geração de várias classes que tenham o mesmo 
+código, apenas com tipos diferentes.
+
+Apesar da tradução ainda estar em uma fase inicial, não foram identificados grandes problemas em traduzir
+uma linguagem com um sistema de tipos similar a ML para uma representação orientada a objeto.
+O maior desafio, provavelmente, será a introdução de suporte a classes de tipos.
+
+Por ser um trabalho muito extenso e que demanda um estudo aprofundado, especialmente sobre inferência de tipos,
+não foi possível focar em otimizações na tradução das declarações. Da mesma forma, não possuímos dados ou
+testes que verifiquem a eficiência dessas traduções, ficando como sugestão para trabalho futuro o estudo
+da atual performance em comparação com outras implementações de compiladores de linguagem funcional, assim
+como efetuar modificações para melhorar a performance atual.
+
+Como já foi dito, este trabalho é muito extenso, e, por isso, não seria suficiente para
+explorar todos os tópicos envolvidos com a tradução de linguagens funcionais para a sua execução em plataformas
+de máquina virtual. Assim, tem-se também o objetivo de constituir uma base para trabalhos futuros.
+
+\section{Trabalhos Futuros}
+
+As seguintes metas podem ser destacadas para o aperfeiçoamento deste trabalho:
+
+\begin{itemize}
+	\item Implementar a tradução de todas as declarações;
+	\item Efetuar testes de performance e estudar possíveis otimizações, por exemplo, a otimização de chamadas
+recursivas de calda (\textit{tail calls});
+	\item Avaliar a integração, sob a mesma plataforma, entre código funcional e orientação a objeto;
+	\item Estudar a inclusão do suporte a mônadas;
+	\item Implementar a ordem de avaliação preguiçosa;
+	\item Desenvolvimento de um ambiente de execução (\textit{runtime system});
+	\item Adicionar o tratamento de sobrecarga através de classes de tipo.
+\end{itemize}

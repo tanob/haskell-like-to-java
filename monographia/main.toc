@@ -1,0 +1,64 @@
+\select@language {brazil}
+\contentsline {chapter}{\numberline {1}Introdu\c c\~ao}{10}{chapter.listoftables.1}
+\contentsline {section}{\numberline {1.1}Motiva\c c\~ao}{11}{section.listoftables.1.1}
+\contentsline {section}{\numberline {1.2}Objetivos}{12}{section.listoftables.1.2}
+\contentsline {section}{\numberline {1.3}Organiza\c c\~ao do Trabalho}{12}{section.listoftables.1.3}
+\contentsline {chapter}{\numberline {2}Programa\c c\~ao Funcional}{14}{chapter.listoftables.2}
+\contentsline {section}{\numberline {2.1}C\'alculo Lambda}{14}{section.listoftables.2.1}
+\contentsline {section}{\numberline {2.2}LISP}{16}{section.listoftables.2.2}
+\contentsline {section}{\numberline {2.3}ML}{18}{section.listoftables.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Declara\c c\~oes e Tipos de Dados}{20}{subsection.listoftables.2.3.1}
+\contentsline {subsubsection}{Tipos B\'asicos}{21}{subsection.listoftables.2.3.1}
+\contentsline {subsubsection}{Tipos Sin\^onimos e Alg\'ebricos}{23}{subsection.listoftables.2.3.1}
+\contentsline {subsubsection}{Refer\^encia}{25}{subsection.listoftables.2.3.1}
+\contentsline {section}{\numberline {2.4}Sistema de tipos e Infer\^encia}{26}{section.listoftables.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Seguran\c ca e Checagem de Tipos}{26}{subsection.listoftables.2.4.1}
+\contentsline {subsection}{\numberline {2.4.2}Infer\^encia de Tipos}{27}{subsection.listoftables.2.4.2}
+\contentsline {section}{\numberline {2.5}Haskell}{30}{section.listoftables.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Avalia\c c\~ao Pregui\c cosa}{30}{subsection.listoftables.2.5.1}
+\contentsline {subsection}{\numberline {2.5.2}Classes de tipo}{31}{subsection.listoftables.2.5.2}
+\contentsline {subsection}{\numberline {2.5.3}M\^onadas}{33}{subsection.listoftables.2.5.3}
+\contentsline {section}{\numberline {2.6}S\IeC {\'\i }ntese}{35}{section.listoftables.2.6}
+\contentsline {chapter}{\numberline {3}M\'aquina Virtual Java}{37}{chapter.listoftables.3}
+\contentsline {section}{\numberline {3.1}Caracter\IeC {\'\i }sticas Gerais}{37}{section.listoftables.3.1}
+\contentsline {section}{\numberline {3.2}Tipos de Dados}{38}{section.listoftables.3.2}
+\contentsline {section}{\numberline {3.3}\'Areas de Mem\'oria}{39}{section.listoftables.3.3}
+\contentsline {subsection}{\numberline {3.3.1}\'Area de M\'etodos}{40}{subsection.listoftables.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Heap}{41}{subsection.listoftables.3.3.2}
+\contentsline {subsection}{\numberline {3.3.3}Pilha da \textit {Thread}}{41}{subsection.listoftables.3.3.3}
+\contentsline {subsection}{\numberline {3.3.4}Pilha de M\'etodos Nativos}{42}{subsection.listoftables.3.3.4}
+\contentsline {section}{\numberline {3.4}Conjunto de Instru\c c\~oes (\textit {opcodes})}{43}{section.listoftables.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Instru\c c\~oes de Vari\'aveis Locais e Pilha de Operandos}{43}{subsection.listoftables.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Instru\c c\~oes Aritm\'eticas}{45}{subsection.listoftables.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}Instru\c c\~oes de Convers\~ao de Tipos}{45}{subsection.listoftables.3.4.3}
+\contentsline {subsection}{\numberline {3.4.4}Cria\c c\~ao e Manipula\c c\~ao de Objetos}{46}{subsection.listoftables.3.4.4}
+\contentsline {subsection}{\numberline {3.4.5}Instru\c c\~oes de Transfer\^encia de Controle}{46}{subsection.listoftables.3.4.5}
+\contentsline {subsection}{\numberline {3.4.6}Instru\c c\~oes de Chamada e Retorno de M\'etodos}{47}{subsection.listoftables.3.4.6}
+\contentsline {subsection}{\numberline {3.4.7}Instru\c c\~oes de Manipula\c c\~ao de Exce\c c\~oes}{47}{subsection.listoftables.3.4.7}
+\contentsline {subsection}{\numberline {3.4.8}Instru\c c\~oes para Sincroniza\c c\~ao}{47}{subsection.listoftables.3.4.8}
+\contentsline {section}{\numberline {3.5}Execu\c c\~ao}{47}{section.listoftables.3.5}
+\contentsline {section}{\numberline {3.6}Especifica\c c\~ao dos Arquivos \textit {.class}}{48}{section.listoftables.3.6}
+\contentsline {chapter}{\numberline {4}Implementa\c c\~ao}{49}{chapter.listoftables.4}
+\contentsline {section}{\numberline {4.1}Analisador Sint\'atico}{49}{section.listoftables.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Parsec}{49}{subsection.listoftables.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}C\'odigo Intermedi\'ario}{52}{subsection.listoftables.4.1.2}
+\contentsline {subsubsection}{Identificadores}{52}{subsection.listoftables.4.1.2}
+\contentsline {subsubsection}{Tipos}{52}{subsection.listoftables.4.1.2}
+\contentsline {subsubsection}{Substitui\c c\~oes}{53}{subsection.listoftables.4.1.2}
+\contentsline {subsubsection}{Esquemas de Tipo (\textit {Type Scheme})}{53}{subsection.listoftables.4.1.2}
+\contentsline {subsubsection}{Suposi\c c\~oes de Tipo}{54}{subsection.listoftables.4.1.2}
+\contentsline {subsubsection}{Literais}{54}{subsection.listoftables.4.1.2}
+\contentsline {subsubsection}{Padr\~oes}{54}{subsection.listoftables.4.1.2}
+\contentsline {subsubsection}{Express\~oes}{55}{subsection.listoftables.4.1.2}
+\contentsline {subsubsection}{Alternativas}{55}{subsection.listoftables.4.1.2}
+\contentsline {subsubsection}{\textit {Binding Groups}}{56}{subsection.listoftables.4.1.2}
+\contentsline {subsubsection}{Exemplos de sa\IeC {\'\i }das}{57}{subsection.listoftables.4.1.2}
+\contentsline {section}{\numberline {4.2}Inferidor de Tipos}{58}{section.listoftables.4.2}
+\contentsline {section}{\numberline {4.3}Sa\IeC {\'\i }da do Compilador (\textit {backend})}{59}{section.listoftables.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Jasmin}{60}{subsection.listoftables.4.3.1}
+\contentsline {subsubsection}{Formato do Arquivo Jasmin}{60}{subsection.listoftables.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Tradu\c c\~oes}{62}{subsection.listoftables.4.3.2}
+\contentsline {section}{\numberline {4.4}S\IeC {\'\i }ntese}{67}{section.listoftables.4.4}
+\contentsline {chapter}{\numberline {5}Conclus\~ao}{68}{chapter.listoftables.5}
+\contentsline {section}{\numberline {5.1}Trabalhos Futuros}{69}{section.listoftables.5.1}
+\contentsline {chapter}{Refer\^encias Bibliogr\'aficas}{70}{section.listoftables.5.1}

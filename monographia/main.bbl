@@ -1,0 +1,366 @@
+\providecommand{\abntreprintinfo}[1]{%
+ \citeonline{#1}}
+\setlength{\labelsep}{0pt}\begin{thebibliography}{}
+\providecommand{\abntrefinfo}[3]{}
+\providecommand{\abntbstabout}[1]{}
+\abntbstabout{1.52 }
+
+\bibitem[Aho, Sethi e Ullman 1986]{aho86}
+\abntrefinfo{Aho, Sethi e Ullman}{AHO; SETHI; ULLMAN}{1986}
+{AHO, A.~V.; SETHI, R.; ULLMAN, J.~D. \emph{Compilers: principles, techniques,
+  and tools}. Boston, MA, USA: Addison-Wesley Longman Publishing Co., Inc.,
+  1986.
+ISBN 0-201-10088-6.}
+
+\bibitem[Arnold e Gosling 2000]{Gos00}
+\abntrefinfo{Arnold e Gosling}{ARNOLD; GOSLING}{2000}
+{ARNOLD, K.; GOSLING, J. \emph{The Java Programming Language}. third. [S.l.]:
+  Addison-Wesley, 2000.}
+
+\bibitem[Backus 1981]{fortran}
+\abntrefinfo{Backus}{BACKUS}{1981}
+{BACKUS, J. The history of {F}ortran {I}, {II}, and {III}.
+ACM, New York, NY, USA, p. 25--74, 1981.}
+
+\bibitem[Benton e Kennedy 1999]{benton1999}
+\abntrefinfo{Benton e Kennedy}{BENTON; KENNEDY}{1999}
+{BENTON, N.; KENNEDY, A. {I}nterlanguage working without tears: blending {SML}
+  with {J}ava. In:  \emph{ICFP '99: Proceedings of the fourth ACM SIGPLAN
+  international conference on Functional programming}. New York, NY, USA: ACM,
+  1999. p. 126--137.
+ISBN 1-58113-111-9.}
+
+\bibitem[Benton, Kennedy e Russell 1998]{smlj}
+\abntrefinfo{Benton, Kennedy e Russell}{BENTON; KENNEDY; RUSSELL}{1998}
+{BENTON, N.; KENNEDY, A.; RUSSELL, G. {C}ompiling {S}tandard {ML} to {J}ava
+  bytecodes. In:  \emph{ICFP '98: Proceedings of the third ACM SIGPLAN
+  international conference on Functional programming}. New York, NY, USA: ACM,
+  1998. p. 129--140.
+ISBN 1-58113-024-4.}
+
+\bibitem[Bini 2007]{jruby}
+\abntrefinfo{Bini}{BINI}{2007}
+{BINI, O. \emph{Practical JRuby on Rails Web 2.0 Projects: Bringing Ruby on
+  Rails to Java}. Berkeley, CA, USA: Apress, 2007.
+ISBN 1590598814.}
+
+\bibitem[Bloch 2008]{bloch2008}
+\abntrefinfo{Bloch}{BLOCH}{2008}
+{BLOCH, J. \emph{Effective Java (2nd Edition) (The Java Series)}. Upper Saddle
+  River, NJ, USA: Prentice Hall PTR, 2008.
+ISBN 0321356683, 9780321356680.}
+
+\bibitem[Church e Rosser 1936]{ChurchRosser36}
+\abntrefinfo{Church e Rosser}{CHURCH; ROSSER}{1936}
+{CHURCH, A.; ROSSER, J. Some properties of conversion.
+\emph{Transactions of the American Mathematical Society}, v.~3, p. 472--482,
+  1936.}
+
+\bibitem[Damas e Milner 1982]{Dam82}
+\abntrefinfo{Damas e Milner}{DAMAS; MILNER}{1982}
+{DAMAS, L.; MILNER, R. {Principal Type-Schemes for Functional Programs}. In:
+  \emph{{Proceedings of the 9th ACM SIGPLAN-SIGACT Symposium on Principles of
+  Programming Languages}}. [S.l.]: ACM Press, 1982. p. 207--212.
+ISBN 0-89791-065-6.}
+
+\bibitem[Fokker 1995]{fokker95}
+\abntrefinfo{Fokker}{FOKKER}{1995}
+{FOKKER, J. Functional parsers. In:  \emph{Advanced Functional Programming,
+  First International Spring School on Advanced Functional Programming
+  Techniques-Tutorial Text}. London, UK: Springer-Verlag, 1995. p. 1--23.
+ISBN 3-540-59451-5. Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/people\-.cs\-.uu\-.nl\-/jeroen\-/article\-/%
+parsers\-/parsers\-.ps$>$}{http://people.cs.uu.nl/jeroen/article/parsers/parse%
+rs.ps}.}
+
+\bibitem[Hudak 1989]{hudak89}
+\abntrefinfo{Hudak}{HUDAK}{1989}
+{HUDAK, P. Conception, evolution, and application of functional programming
+  languages.
+\emph{ACM Comput. Surv.}, ACM, New York, NY, USA, v.~21, n.~3, p. 359--411,
+  1989.
+ISSN 0360-0300.}
+
+\bibitem[Hudak et al. 2007]{historyHaskell}
+\abntrefinfo{Hudak et al.}{HUDAK et al.}{2007}
+{HUDAK, P. et al. A history of haskell: being lazy with class. In:
+  \emph{HOPL}. ACM, 2007. p. 1--55. Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/research\-.microsoft\-.com\-/\~{}simonpj\-/%
+papers\-/history-of-haskell\-/history\-.pdf$>$}{http://research.microsoft.com/%
+~simonpj/papers/history-of-haskell/history.pdf}.}
+
+\bibitem[Hughes 1989]{whyfp}
+\abntrefinfo{Hughes}{HUGHES}{1989}
+{HUGHES, J. Why functional programming matters.
+\emph{Computer Journal}, Oxford University Press, Oxford, UK, v.~32, n.~2, p.
+  98--107, 1989.
+ISSN 0010-4620.}
+
+\bibitem[Hughes 2000]{hughes2000}
+\abntrefinfo{Hughes}{HUGHES}{2000}
+{HUGHES, J. Generalising monads to arrows.
+\emph{Science of Computer Programming}, v.~37, p. 67--111, 2000.
+Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/www\-.cs\-.chalmers\-.se\-/\~{}rjmh\-/Paper%
+s\-/arrows\-.ps$>$}{http://www.cs.chalmers.se/~rjmh/Papers/arrows.ps}.}
+
+\bibitem[Jensen e Wirth 1974]{Wir91}
+\abntrefinfo{Jensen e Wirth}{JENSEN; WIRTH}{1974}
+{JENSEN, K.; WIRTH, N. \emph{PASCAL - User Manual and Report}. [S.l.]: Springer
+  Verlag, 1974.}
+
+\bibitem[Johnson e Sethi 1990]{yacc}
+\abntrefinfo{Johnson e Sethi}{JOHNSON; SETHI}{1990}
+{JOHNSON, S.~C.; SETHI, R. Yacc: a parser generator.
+W. B. Saunders Company, Philadelphia, PA, USA, p. 347--374, 1990.}
+
+\bibitem[Jones e Meijer 1997]{simonpj97}
+\abntrefinfo{Jones e Meijer}{JONES; MEIJER}{1997}
+{JONES, M.~J. S.~P.; MEIJER, E. Type classes: exploring the design space. In:
+  \emph{Procedings of the Haskell Workshop 1997}. [s.n.], 1997. Dispon{\'\i}vel
+  em:
+  \htmladdnormallink{$<$http:\-/\-/research\-.microsoft\-.com\-/Users\-/simonp%
+j\-/Papers\-/type-class-design-space\-/multi\-.ps\-.gz$>$}{http://research.mic%
+rosoft.com/Users/simonpj/Papers/type-class-design-space/multi.ps.gz}.}
+
+\bibitem[Jones 1999]{Mark99}
+\abntrefinfo{Jones}{JONES}{1999}
+{JONES, M.~P. Typing {H}askell in {H}askell. In:  \emph{Proceedings of the 1999
+  Haskell Workshop}. [s.n.], 1999. Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/web\-.cecs\-.pdx\-.edu\-/\~{}mpj\-/thih\-/$%
+>$}{http://web.cecs.pdx.edu/~mpj/thih/}.}
+
+\bibitem[Jones 2002]{Has02}
+\abntrefinfo{Jones}{JONES}{2002}
+{JONES, S.~P. (Ed.).
+Language Definition. \emph{Haskell 98 Language and Libraries: The Revised
+  Report}. [s.n.], 2002. 277~p. PDF. Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/haskell\-.org\-/definition\-/haskell98-repo%
+rt\-.pdf$>$}{http://haskell.org/definition/haskell98-report.pdf}.}
+
+\bibitem[Kernighan e Ritchie 1988]{Ker88}
+\abntrefinfo{Kernighan e Ritchie}{KERNIGHAN; RITCHIE}{1988}
+{KERNIGHAN, B.~W.; RITCHIE, D.~M. \emph{The C Programming Language}. second.
+  [S.l.]: Prentice Hall, 1988.}
+
+\bibitem[Leijen 2001]{parsec-doc}
+\abntrefinfo{Leijen}{LEIJEN}{2001}
+{LEIJEN, D. \emph{Parsec, a fast parser combinator}.
+[S.l.], 2001. Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/legacy\-.cs\-.uu\-.nl\-/daan\-/download\-/p%
+arsec\-/parsec\-.pdf$>$}{http://legacy.cs.uu.nl/daan/download/parsec/parsec.pd%
+f}.}
+
+\bibitem[Leijen e Meijer 2001]{meijer2001a}
+\abntrefinfo{Leijen e Meijer}{LEIJEN; MEIJER}{2001}
+{LEIJEN, D.; MEIJER, E. \emph{Parsec: Direct Style Monadic Parser Combinators
+  for the Real World}.
+[S.l.], 2001. Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/www\-.cs\-.uu\-.nl\-/\~{}daan\-/papers\-/pa%
+rsec-paper\-.pdf$>$}{http://www.cs.uu.nl/~daan/papers/parsec-paper.pdf}.}
+
+\bibitem[Lindholm e Yellin 1999]{jvmspec}
+\abntrefinfo{Lindholm e Yellin}{LINDHOLM; YELLIN}{1999}
+{LINDHOLM, T.; YELLIN, F. \emph{The Java Virtual Machine Specification}.
+  Boston, MA, USA: Addison-Wesley Longman Publishing Co., Inc., 1999.
+ISBN 0201432943.}
+
+\bibitem[Lisp 2008]{wikipediaLisp}
+\abntrefinfo{Lisp}{LISP}{2008}
+{LISP.
+2008.
+Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/en\-.wikipedia\-.org\-/wiki\-/LISP$>$}{http%
+://en.wikipedia.org/wiki/LISP}. Acesso em: 16 out. 2008.}
+
+\bibitem[Matthews e Findler 2007]{matthews2007}
+\abntrefinfo{Matthews e Findler}{MATTHEWS; FINDLER}{2007}
+{MATTHEWS, J.; FINDLER, R.~B. Operational semantics for multi-language
+  programs. In:  \emph{POPL '07: Proceedings of the 34th annual ACM
+  SIGPLAN-SIGACT symposium on Principles of programming languages}. New York,
+  NY, USA: ACM, 2007. p. 3--10.
+ISBN 1-59593-575-4.}
+
+\bibitem[McCarthy 1960]{Mc60}
+\abntrefinfo{McCarthy}{MCCARTHY}{1960}
+{MCCARTHY, J. Recursive functions of symbolic expressions and their computation
+  by machine, part i.
+\emph{Commun. ACM}, ACM, New York, NY, USA, v.~3, n.~4, p. 184--195, 1960.
+ISSN 0001-0782.}
+
+\bibitem[McCarthy et al. 1965]{Mc65}
+\abntrefinfo{McCarthy et al.}{MCCARTHY et al.}{1965}
+{MCCARTHY, J. et al. \emph{Lisp 1.5 Programmer's Manual}. second. [S.l.]: MIT
+  Press, 1965.}
+
+\bibitem[Meijer 2008]{meijer2008}
+\abntrefinfo{Meijer}{MEIJER}{2008}
+{MEIJER, E. Fundamentalist functional programming. In:  \emph{GPCE '08:
+  Proceedings of the 7th international conference on Generative programming and
+  component engineering}. New York, NY, USA: ACM, 2008. p. 99--100.
+ISBN 978-1-60558-267-2.}
+
+\bibitem[Microsoft 2008]{mondrian}
+\abntrefinfo{Microsoft}{MICROSOFT}{2008a}
+{MICROSOFT. \emph{Mondrian}. 2008.
+Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/research\-.microsoft\-.com\-/\~{}emeijer\-/%
+Papers\-/ECOOP\-.pdf$>$}{http://research.microsoft.com/~emeijer/Papers/ECOOP.p%
+df}. Acesso em: 12 nov. 2008.}
+
+\bibitem[Microsoft 2008]{smlnet}
+\abntrefinfo{Microsoft}{MICROSOFT}{2008b}
+{MICROSOFT. \emph{The SML.NET compiler}. 2008.
+Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/research\-.microsoft\-.com\-/projects\-/sml%
+\-.net\-/$>$}{http://research.microsoft.com/projects/sml.net/}. Acesso em: 12
+  nov. 2008.}
+
+\bibitem[Microsystems 2004]{java-enum}
+\abntrefinfo{Microsystems}{MICROSYSTEMS}{2004}
+{MICROSYSTEMS, S. \emph{Enums}. 2004.
+Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/java\-.sun\-.com\-/j2se\-/1\-.5\-.0\-/docs\%
+-/guide\-/language\-/enums\-.html$>$}{http://java.sun.com/j2se/1.5.0/docs/guid%
+e/language/enums.html}.}
+
+\bibitem[Milner 1978]{Mil78}
+\abntrefinfo{Milner}{MILNER}{1978}
+{MILNER, R. A {T}heory of {T}ype {P}olymorphism in {P}rogramming.
+\emph{{J}ournal of {C}omputer and {S}ystems {S}ciences}, n.~17, p. 384--375,
+  1978.}
+
+\bibitem[Milner, Tofte e Harper 1990]{Mil90}
+\abntrefinfo{Milner, Tofte e Harper}{MILNER; TOFTE; HARPER}{1990}
+{MILNER, R.; TOFTE, M.; HARPER, R. \emph{The Definition of Standard ML}.
+  [S.l.]: MIT Press, 1990.}
+
+\bibitem[Mitchell 1996]{John96}
+\abntrefinfo{Mitchell}{MITCHELL}{1996}
+{MITCHELL, J. \emph{Foundations for Programming Languages}. [S.l.]: MIT Press,
+  1996.}
+
+\bibitem[Mitchell e Apt 2001]{jmitchell2003}
+\abntrefinfo{Mitchell e Apt}{MITCHELL; APT}{2001}
+{MITCHELL, J.~C.; APT, K. \emph{{C}oncepts in {P}rogramming {L}anguages}. New
+  York, NY, USA: {C}ambridge {U}niversity {P}ress, 2001.
+ISBN 0521780985.}
+
+\bibitem[Moggi 1989]{moggi89}
+\abntrefinfo{Moggi}{MOGGI}{1989}
+{MOGGI, E. Computational lambda-calculus and monads. In:  \emph{LICS}. [S.l.]:
+  IEEE Computer Society, 1989. p. 14--23.}
+
+\bibitem[Odersky 2008]{scala}
+\abntrefinfo{Odersky}{ODERSKY}{2008}
+{ODERSKY, M. \emph{The Scala Programming Language}. 2008.
+Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/www\-.scala-lang\-.org$>$}{http://www.scala%
+-lang.org}. Acesso em: 12 nov. 2008.}
+
+\bibitem[Pedroni e Rappin 2002]{jython}
+\abntrefinfo{Pedroni e Rappin}{PEDRONI; RAPPIN}{2002}
+{PEDRONI, S.; RAPPIN, N. \emph{Jython Essentials: Rapid Scripting in Java}.
+  Sebastopol, CA, USA: O'Reilly \& Associates, Inc., 2002.
+ISBN 0596002475.}
+
+\bibitem[Pierce 2002]{Pie02}
+\abntrefinfo{Pierce}{PIERCE}{2002}
+{PIERCE, B.~C. \emph{Types and Programming Languages}. [S.l.]: MIT Press,
+  2002.}
+
+\bibitem[Reynaud e Meyer 2006]{jasmin}
+\abntrefinfo{Reynaud e Meyer}{REYNAUD; MEYER}{2006}
+{REYNAUD, D.; MEYER, J. \emph{Jasmin}. March 2006.
+Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/jasmin\-.sourceforge\-.net\-/$>$}{http://ja%
+smin.sourceforge.net/}.}
+
+\bibitem[Robinson 1965]{Rob65}
+\abntrefinfo{Robinson}{ROBINSON}{1965}
+{ROBINSON, J.~A. {A Machine-Oriented Logic Based on the Resolution Principle}.
+\emph{J. ACM}, ACM Press, v.~12, n.~1, p. 23--41, 1965.
+ISSN 0004-5411.}
+
+\bibitem[Silva 2003]{jarismar2003}
+\abntrefinfo{Silva}{SILVA}{2003}
+{SILVA, J.~C. da.
+\emph{Migração do Ambiente de Programação da Linguagem LS para a Máquina
+  Virtual Java}.
+Monografia (Bacharelado) --- Curso de Ciência da Computação, Universidade
+  Federal de Pelotas, Pelotas, 2003.}
+
+\bibitem[Systems et al. 1994]{IPS:1994:DPA}
+\abntrefinfo{Systems et al.}{SYSTEMS et al.}{1994}
+{SYSTEMS, I.~P. et al. \emph{Draft proposed {American National Standard
+  Programming Language Common LISP}}.
+Washington, DC, USA, jan. 1994.}
+
+\bibitem[TIOBE 2008]{tiobe}
+\abntrefinfo{TIOBE}{TIOBE}{2008}
+{TIOBE. \emph{TIOBE Programming Community Index}. November 2008.
+Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/www\-.tiobe\-.com\-/tpci\-.htm$>$}{http://w%
+ww.tiobe.com/tpci.htm}. Acesso em: 9 nov. 2008.}
+
+\bibitem[Tolksdorf 2008]{jvmlangs}
+\abntrefinfo{Tolksdorf}{TOLKSDORF}{2008}
+{TOLKSDORF, R. \emph{Programming Languages for the Java Virtual Machine}. 2008.
+Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/www\-.is-research\-.de\-/info\-/vmlanguages%
+\-/$>$}{http://www.is-research.de/info/vmlanguages/}. Acesso em: 12 set. 2008.}
+
+\bibitem[Turner 1987]{miranda87}
+\abntrefinfo{Turner}{TURNER}{1987}
+{TURNER, D. An overview of miranda.
+\emph{Bulletin of the EATCS}, v.~33, p. 103--114, 1987.
+Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/dblp\-.uni-trier\-.de\-/db\-/journals\-/eat%
+cs\-/eatcs33\-.html$>$}{http://dblp.uni-trier.de/db/journals/eatcs/eatcs33.htm%
+l}.}
+
+\bibitem[Vasconcellos, Figueiredo e Camarao 2003]{Vas03}
+\abntrefinfo{Vasconcellos, Figueiredo e Camarao}{VASCONCELLOS; FIGUEIREDO;
+  CAMARAO}{2003}
+{VASCONCELLOS, C.; FIGUEIREDO, L.; CAMARAO, C. {Practical Type Inference for
+  Polymorphic Recursion: an Implementation in {H}askell}.
+\emph{j-jucs}, v.~9, n.~8, p. 873--890, 2003.
+Dispon{\'\i}vel em:
+  \htmladdnormallink{$<$http:\-/\-/www\-.jucs\-.org\-/jucs\underline{\
+  }9\underline{\ }8\-/practical\underline{\ }type\underline{\
+  }inference\underline{\
+  }for$>$}{http://www.jucs.org/jucs_9_8/practical_type_inference_for}.}
+
+\bibitem[Vasconcellos 2004]{Vas04}
+\abntrefinfo{Vasconcellos}{VASCONCELLOS}{2004}
+{VASCONCELLOS, C.~D.
+\emph{{I}nferência de {T}ipos com {S}uporte para {S}obrecarga {B}aseada no
+  {S}istema {CT}}.
+Tese (Doutorado) --- Universidade Federal de Minas Gerais, 2004.}
+
+\bibitem[Venners 1996]{insidejvm}
+\abntrefinfo{Venners}{VENNERS}{1996}
+{VENNERS, B. \emph{Inside the Java Virtual Machine}. New York, NY, USA:
+  McGraw-Hill, Inc., 1996.
+ISBN 0079132480.}
+
+\bibitem[Wadler 1990]{Wadler90}
+\abntrefinfo{Wadler}{WADLER}{1990}
+{WADLER, P. Comprehending monads. In:  \emph{LFP '90: Proceedings of the 1990
+  ACM conference on LISP and functional programming}. New York, NY, USA: ACM,
+  1990. p. 61--78.
+ISBN 0-89791-368-X.}
+
+\bibitem[Wadler e Blott 1989]{Wadler89}
+\abntrefinfo{Wadler e Blott}{WADLER; BLOTT}{1989}
+{WADLER, P.; BLOTT, S. How to make ad-hoc {P}olymorphism less ad-hoc. In:
+  \emph{Proceedings of the 16th ACM SIGPLAN-SIGACT {S}ymposium on {P}rinciples
+  of {P}rogramming {L}anguages}. [S.l.]: ACM Press, 1989. p. 60--76.
+ISBN 0-89791-294-2.}
+
+\bibitem[Wirth 1977]{Wirth77}
+\abntrefinfo{Wirth}{WIRTH}{1977}
+{WIRTH, N. {Design and Implementation of Modula}.
+\emph{Software -- Practice and Experience}, v.~7, p. 67--84, 1977.}
+
+\end{thebibliography}
