@@ -1,48 +1,63 @@
-\BOOKMARK [0][-]{chapter.listoftables.1}{Introdu\347\343o}{}
-\BOOKMARK [1][-]{section.listoftables.1.1}{Motiva\347\343o}{chapter.listoftables.1}
-\BOOKMARK [1][-]{section.listoftables.1.2}{Objetivos}{chapter.listoftables.1}
-\BOOKMARK [1][-]{section.listoftables.1.3}{Organiza\347\343o do Trabalho}{chapter.listoftables.1}
-\BOOKMARK [0][-]{chapter.listoftables.2}{Programa\347\343o Funcional}{}
-\BOOKMARK [1][-]{section.listoftables.2.1}{C\341lculo Lambda}{chapter.listoftables.2}
-\BOOKMARK [1][-]{section.listoftables.2.2}{LISP}{chapter.listoftables.2}
-\BOOKMARK [1][-]{section.listoftables.2.3}{ML}{chapter.listoftables.2}
-\BOOKMARK [2][-]{subsection.listoftables.2.3.1}{Declara\347\365es e Tipos de Dados}{section.listoftables.2.3}
-\BOOKMARK [1][-]{section.listoftables.2.4}{Sistema de tipos e Infer\352ncia}{chapter.listoftables.2}
-\BOOKMARK [2][-]{subsection.listoftables.2.4.1}{Seguran\347a e Checagem de Tipos}{section.listoftables.2.4}
-\BOOKMARK [2][-]{subsection.listoftables.2.4.2}{Infer\352ncia de Tipos}{section.listoftables.2.4}
-\BOOKMARK [1][-]{section.listoftables.2.5}{Haskell}{chapter.listoftables.2}
-\BOOKMARK [2][-]{subsection.listoftables.2.5.1}{Avalia\347\343o Pregui\347osa}{section.listoftables.2.5}
-\BOOKMARK [2][-]{subsection.listoftables.2.5.2}{Classes de tipo}{section.listoftables.2.5}
-\BOOKMARK [2][-]{subsection.listoftables.2.5.3}{M\364nadas}{section.listoftables.2.5}
-\BOOKMARK [1][-]{section.listoftables.2.6}{S\355ntese}{chapter.listoftables.2}
-\BOOKMARK [0][-]{chapter.listoftables.3}{M\341quina Virtual Java}{}
-\BOOKMARK [1][-]{section.listoftables.3.1}{Caracter\355sticas Gerais}{chapter.listoftables.3}
-\BOOKMARK [1][-]{section.listoftables.3.2}{Tipos de Dados}{chapter.listoftables.3}
-\BOOKMARK [1][-]{section.listoftables.3.3}{\301reas de Mem\363ria}{chapter.listoftables.3}
-\BOOKMARK [2][-]{subsection.listoftables.3.3.1}{\301rea de M\351todos}{section.listoftables.3.3}
-\BOOKMARK [2][-]{subsection.listoftables.3.3.2}{Heap}{section.listoftables.3.3}
-\BOOKMARK [2][-]{subsection.listoftables.3.3.3}{Pilha da Thread}{section.listoftables.3.3}
-\BOOKMARK [2][-]{subsection.listoftables.3.3.4}{Pilha de M\351todos Nativos}{section.listoftables.3.3}
-\BOOKMARK [1][-]{section.listoftables.3.4}{Conjunto de Instru\347\365es \(opcodes\)}{chapter.listoftables.3}
-\BOOKMARK [2][-]{subsection.listoftables.3.4.1}{Instru\347\365es de Vari\341veis Locais e Pilha de Operandos}{section.listoftables.3.4}
-\BOOKMARK [2][-]{subsection.listoftables.3.4.2}{Instru\347\365es Aritm\351ticas}{section.listoftables.3.4}
-\BOOKMARK [2][-]{subsection.listoftables.3.4.3}{Instru\347\365es de Convers\343o de Tipos}{section.listoftables.3.4}
-\BOOKMARK [2][-]{subsection.listoftables.3.4.4}{Cria\347\343o e Manipula\347\343o de Objetos}{section.listoftables.3.4}
-\BOOKMARK [2][-]{subsection.listoftables.3.4.5}{Instru\347\365es de Transfer\352ncia de Controle}{section.listoftables.3.4}
-\BOOKMARK [2][-]{subsection.listoftables.3.4.6}{Instru\347\365es de Chamada e Retorno de M\351todos}{section.listoftables.3.4}
-\BOOKMARK [2][-]{subsection.listoftables.3.4.7}{Instru\347\365es de Manipula\347\343o de Exce\347\365es}{section.listoftables.3.4}
-\BOOKMARK [2][-]{subsection.listoftables.3.4.8}{Instru\347\365es para Sincroniza\347\343o}{section.listoftables.3.4}
-\BOOKMARK [1][-]{section.listoftables.3.5}{Execu\347\343o}{chapter.listoftables.3}
-\BOOKMARK [1][-]{section.listoftables.3.6}{Especifica\347\343o dos Arquivos .class}{chapter.listoftables.3}
-\BOOKMARK [0][-]{chapter.listoftables.4}{Implementa\347\343o}{}
-\BOOKMARK [1][-]{section.listoftables.4.1}{Analisador Sint\341tico}{chapter.listoftables.4}
-\BOOKMARK [2][-]{subsection.listoftables.4.1.1}{Parsec}{section.listoftables.4.1}
-\BOOKMARK [2][-]{subsection.listoftables.4.1.2}{C\363digo Intermedi\341rio}{section.listoftables.4.1}
-\BOOKMARK [1][-]{section.listoftables.4.2}{Inferidor de Tipos}{chapter.listoftables.4}
-\BOOKMARK [1][-]{section.listoftables.4.3}{Sa\355da do Compilador \(backend\)}{chapter.listoftables.4}
-\BOOKMARK [2][-]{subsection.listoftables.4.3.1}{Jasmin}{section.listoftables.4.3}
-\BOOKMARK [2][-]{subsection.listoftables.4.3.2}{Tradu\347\365es}{section.listoftables.4.3}
-\BOOKMARK [1][-]{section.listoftables.4.4}{S\355ntese}{chapter.listoftables.4}
-\BOOKMARK [0][-]{chapter.listoftables.5}{Conclus\343o}{}
-\BOOKMARK [1][-]{section.listoftables.5.1}{Trabalhos Futuros}{chapter.listoftables.5}
-\BOOKMARK [0][-]{section.listoftables.5.1}{Refer\352ncias Bibliogr\341ficas}{}
+\BOOKMARK [0][-]{chapter.1}{Introdu\347\343o}{}
+\BOOKMARK [1][-]{section.1.1}{Motiva\347\343o}{chapter.1}
+\BOOKMARK [1][-]{section.1.2}{Objetivos}{chapter.1}
+\BOOKMARK [1][-]{section.1.3}{Organiza\347\343o do Trabalho}{chapter.1}
+\BOOKMARK [0][-]{chapter.2}{Programa\347\343o Funcional}{}
+\BOOKMARK [1][-]{section.2.1}{C\341lculo Lambda}{chapter.2}
+\BOOKMARK [1][-]{section.2.2}{LISP}{chapter.2}
+\BOOKMARK [1][-]{section.2.3}{ML}{chapter.2}
+\BOOKMARK [2][-]{subsection.2.3.1}{Declara\347\365es e Tipos de Dados}{section.2.3}
+\BOOKMARK [3][-]{subsubsection.2.3.1.1}{Tipos B\341sicos}{subsection.2.3.1}
+\BOOKMARK [3][-]{subsubsection.2.3.1.2}{Tipos Sin\364nimos e Alg\351bricos}{subsection.2.3.1}
+\BOOKMARK [3][-]{subsubsection.2.3.1.3}{Refer\352ncia}{subsection.2.3.1}
+\BOOKMARK [1][-]{section.2.4}{Sistema de tipos e Infer\352ncia}{chapter.2}
+\BOOKMARK [2][-]{subsection.2.4.1}{Seguran\347a e Checagem de Tipos}{section.2.4}
+\BOOKMARK [2][-]{subsection.2.4.2}{Infer\352ncia de Tipos}{section.2.4}
+\BOOKMARK [1][-]{section.2.5}{Haskell}{chapter.2}
+\BOOKMARK [2][-]{subsection.2.5.1}{Avalia\347\343o Pregui\347osa}{section.2.5}
+\BOOKMARK [2][-]{subsection.2.5.2}{Classes de tipo}{section.2.5}
+\BOOKMARK [2][-]{subsection.2.5.3}{M\364nadas}{section.2.5}
+\BOOKMARK [1][-]{section.2.6}{S\355ntese}{chapter.2}
+\BOOKMARK [0][-]{chapter.3}{M\341quina Virtual Java}{}
+\BOOKMARK [1][-]{section.3.1}{Caracter\355sticas Gerais}{chapter.3}
+\BOOKMARK [1][-]{section.3.2}{Tipos de Dados}{chapter.3}
+\BOOKMARK [1][-]{section.3.3}{\301reas de Mem\363ria}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.3.1}{\301rea de M\351todos}{section.3.3}
+\BOOKMARK [2][-]{subsection.3.3.2}{Heap}{section.3.3}
+\BOOKMARK [2][-]{subsection.3.3.3}{Pilha da Thread}{section.3.3}
+\BOOKMARK [2][-]{subsection.3.3.4}{Pilha de M\351todos Nativos}{section.3.3}
+\BOOKMARK [1][-]{section.3.4}{Conjunto de Instru\347\365es \(opcodes\)}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.4.1}{Instru\347\365es de Vari\341veis Locais e Pilha de Operandos}{section.3.4}
+\BOOKMARK [2][-]{subsection.3.4.2}{Instru\347\365es Aritm\351ticas}{section.3.4}
+\BOOKMARK [2][-]{subsection.3.4.3}{Instru\347\365es de Convers\343o de Tipos}{section.3.4}
+\BOOKMARK [2][-]{subsection.3.4.4}{Cria\347\343o e Manipula\347\343o de Objetos}{section.3.4}
+\BOOKMARK [2][-]{subsection.3.4.5}{Instru\347\365es de Transfer\352ncia de Controle}{section.3.4}
+\BOOKMARK [2][-]{subsection.3.4.6}{Instru\347\365es de Chamada e Retorno de M\351todos}{section.3.4}
+\BOOKMARK [2][-]{subsection.3.4.7}{Instru\347\365es de Manipula\347\343o de Exce\347\365es}{section.3.4}
+\BOOKMARK [2][-]{subsection.3.4.8}{Instru\347\365es para Sincroniza\347\343o}{section.3.4}
+\BOOKMARK [1][-]{section.3.5}{Execu\347\343o}{chapter.3}
+\BOOKMARK [1][-]{section.3.6}{Especifica\347\343o dos Arquivos .class}{chapter.3}
+\BOOKMARK [0][-]{chapter.4}{Implementa\347\343o}{}
+\BOOKMARK [1][-]{section.4.1}{Analisador Sint\341tico}{chapter.4}
+\BOOKMARK [2][-]{subsection.4.1.1}{Parsec}{section.4.1}
+\BOOKMARK [2][-]{subsection.4.1.2}{C\363digo Intermedi\341rio}{section.4.1}
+\BOOKMARK [3][-]{subsubsection.4.1.2.1}{Identificadores}{subsection.4.1.2}
+\BOOKMARK [3][-]{subsubsection.4.1.2.2}{Tipos}{subsection.4.1.2}
+\BOOKMARK [3][-]{subsubsection.4.1.2.3}{Substitui\347\365es}{subsection.4.1.2}
+\BOOKMARK [3][-]{subsubsection.4.1.2.4}{Esquemas de Tipo \(Type Scheme\)}{subsection.4.1.2}
+\BOOKMARK [3][-]{subsubsection.4.1.2.5}{Suposi\347\365es de Tipo}{subsection.4.1.2}
+\BOOKMARK [3][-]{subsubsection.4.1.2.6}{Literais}{subsection.4.1.2}
+\BOOKMARK [3][-]{subsubsection.4.1.2.7}{Padr\365es}{subsection.4.1.2}
+\BOOKMARK [3][-]{subsubsection.4.1.2.8}{Express\365es}{subsection.4.1.2}
+\BOOKMARK [3][-]{subsubsection.4.1.2.9}{Alternativas}{subsection.4.1.2}
+\BOOKMARK [3][-]{subsubsection.4.1.2.10}{Binding Groups}{subsection.4.1.2}
+\BOOKMARK [3][-]{subsubsection.4.1.2.11}{Exemplos de sa\355das}{subsection.4.1.2}
+\BOOKMARK [1][-]{section.4.2}{Inferidor de Tipos}{chapter.4}
+\BOOKMARK [1][-]{section.4.3}{Sa\355da do Compilador \(backend\)}{chapter.4}
+\BOOKMARK [2][-]{subsection.4.3.1}{Jasmin}{section.4.3}
+\BOOKMARK [3][-]{subsubsection.4.3.1.1}{Formato do Arquivo Jasmin}{subsection.4.3.1}
+\BOOKMARK [2][-]{subsection.4.3.2}{Tradu\347\365es}{section.4.3}
+\BOOKMARK [1][-]{section.4.4}{S\355ntese}{chapter.4}
+\BOOKMARK [0][-]{chapter.5}{Conclus\343o}{}
+\BOOKMARK [1][-]{section.5.1}{Trabalhos Futuros}{chapter.5}
+\BOOKMARK [0][-]{section.5.1}{Refer\352ncias}{}

@@ -1,15 +1,29 @@
-\select@language {brazil}
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Sistema de tipos de Damas-Milner}}{28}{figure.listoftables.2.1}
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Algoritmo $W$}}{29}{figure.listoftables.2.2}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Implementa\c c\~ao da classe de tipos $Monad$}}{34}{figure.listoftables.2.3}
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Implementa\c c\~ao de um m\^onada para \textit {logs}}}{34}{figure.listoftables.2.4}
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Exemplo de uso do m\^onada definido na Fig.~\ref {fig:monada-log}}}{35}{figure.listoftables.2.5}
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Tipos de dados da m\'aquina virtual Java}}{39}{figure.listoftables.3.1}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Pseudo-c\'odigo do la\c co principal do interpretador da JVM}}{43}{figure.listoftables.3.2}
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Exemplo de tipo de dado de enumera\c c\~ao para cores}}{57}{figure.listoftables.4.1}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Sa\IeC {\'\i }da do analisador sint\'atico para o exemplo da Fig.~\ref {fig:enum-cores}}}{57}{figure.listoftables.4.2}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Implementa\c c\~ao da fun\c c\~ao \textit {len}}}{58}{figure.listoftables.4.3}
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Exemplo de sa\IeC {\'\i }da do analisador sint\'atico para a fun\c c\~ao \textit {len}}}{58}{figure.listoftables.4.4}
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Um exemplo de implementa\c c\~ao da fun\c c\~ao \textit {map}}}{65}{figure.listoftables.4.5}
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Tradu\c c\~ao do tipo lista para classes Java}}{66}{figure.listoftables.4.6}
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Implementa\c c\~ao da segunda classe para a tradu\c c\~ao de \textit {map}}}{67}{figure.listoftables.4.7}
+\select@language {brazilian}
+\addvspace {10\p@ }
+\select@language {english}
+\addvspace {10\p@ }
+\select@language {brazilian}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1}{\ignorespaces Sistema de tipos de Damas-Milner}}{30}{figure.2.1}
+\contentsline {figure}{\numberline {2}{\ignorespaces Algoritmo $W$}}{31}{figure.2.2}
+\contentsline {figure}{\numberline {3}{\ignorespaces Implementa\c c\~ao da classe de tipos $Monad$}}{36}{figure.2.3}
+\contentsline {figure}{\numberline {4}{\ignorespaces Implementa\c c\~ao de um m\^onada para \textit {logs}}}{36}{figure.2.4}
+\contentsline {figure}{\numberline {5}{\ignorespaces Exemplo de uso do m\^onada definido na Fig.~\ref {fig:monada-log}}}{37}{figure.2.5}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6}{\ignorespaces Tipos de dados da m\'aquina virtual Java}}{41}{figure.3.6}
+\contentsline {figure}{\numberline {7}{\ignorespaces Pseudo-c\'odigo do la\c co principal do interpretador da JVM}}{45}{figure.3.7}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {8}{\ignorespaces Exemplo de tipo de dado de enumera\c c\~ao para cores}}{60}{figure.4.8}
+\contentsline {figure}{\numberline {9}{\ignorespaces Sa\IeC {\'\i }da do analisador sint\'atico para o exemplo da Fig.~\ref {fig:enum-cores}}}{60}{figure.4.9}
+\contentsline {figure}{\numberline {10}{\ignorespaces Implementa\c c\~ao da fun\c c\~ao \textit {len}}}{61}{figure.4.10}
+\contentsline {figure}{\numberline {11}{\ignorespaces Exemplo de sa\IeC {\'\i }da do analisador sint\'atico para a fun\c c\~ao \textit {len}}}{61}{figure.4.11}
+\contentsline {figure}{\numberline {12}{\ignorespaces Um exemplo de implementa\c c\~ao da fun\c c\~ao \textit {map}}}{68}{figure.4.12}
+\contentsline {figure}{\numberline {13}{\ignorespaces Tradu\c c\~ao do tipo lista para classes Java}}{69}{figure.4.13}
+\contentsline {figure}{\numberline {14}{\ignorespaces Implementa\c c\~ao da segunda classe para a tradu\c c\~ao de \textit {map}}}{70}{figure.4.14}
+\addvspace {10\p@ }
+\addvspace {10\p@ }

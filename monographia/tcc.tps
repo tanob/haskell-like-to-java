@@ -16,12 +16,12 @@ MinPos.x=-1
 MinPos.y=-1
 MaxPos.x=-4
 MaxPos.y=-25
-NormalPos.left=66
-NormalPos.top=72
-NormalPos.right=860
-NormalPos.bottom=524
+NormalPos.left=110
+NormalPos.top=120
+NormalPos.right=900
+NormalPos.bottom=568
 Class=CLatexEdit
-Document=TODO.txt
+Document=main.tex
 
 [Frame0_Row0]
 cyCur=404
@@ -32,7 +32,7 @@ cxCur=949
 cxMin=10
 
 [Frame0_View0,0]
-Cursor.row=12
-Cursor.column=30
+Cursor.row=19
+Cursor.column=51
 TopSubLine=0
 

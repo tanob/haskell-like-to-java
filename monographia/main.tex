@@ -1,70 +1,54 @@
-\documentclass[]{abnt}
+\documentclass[tc]{texufpel}
 \usepackage[T1]{fontenc}
 \usepackage[latin1]{inputenc}
-\usepackage[brazil]{babel}
 \usepackage{amsthm,amsmath,amssymb}
 \usepackage{float}
 \usepackage{color}
 \usepackage{fancyhdr}
 \usepackage{hyperref}
 \usepackage{graphicx}
-% \usepackage{lastpage}
 \usepackage{setspace}
+\usepackage{times}
 \usepackage[caixa=Mm,paginas=nao,ordem=alf]{tabela-simbolos}
 \usepackage[alf,abnt-etal-list=3,abnt-url-package=hyperref]{abntcite} % Se >3 autores, entao usar et al.
 
 \newtheorem*{teorema}{Teorema}
 \newcommand{\unificar}{\ensuremath{\mathit{unificar\/}}}
 
+\author{Alves}{Adriano Bonat}
+\title{Compilando código funcional para bytecodes Java}
+\advisor[Prof.~Dr.]{Vasconcelos}{Cristiano Damiani}
+
+\location{Pelotas}{RS}
+\date{Dezembro}{2008}
+\course{Curso de Ciência da Computação}
+
 \begin{document}
 
 \include{estilos}
-
 \include{declaracoes}
 
-\autor{Adriano Bonat Alves}
-\titulo{Compilando código funcional para bytecodes Java}
-\orientador{Prof. Dr. Cristiano Damiani Vasconcelos}
-\instituicao{Universidade Federal de Pelotas - UFPel}
-\local{Pelotas}
-\data{Novembro de 2008}
+\maketitle
 
-\capa
-\folhaderosto
-
-%\begin{folhadeaprovacao}
-%	\assinatura{Prof. Dr. Cristiano Damiani Vasconcelos \\ Orientador}
-%	\assinatura{Prof. Dr. Fulano de Tal}
-%\end{folhadeaprovacao}
+\examiner{Prof.~Dr. Cristiano Damiani Vasconcelos}
+\examiner{Prof.~Dr. Carlos Antonio Pereira Campani}
+\examiner{Prof.~Dr. Gerson Geraldo Homrich Cavalheiro}
+\makeexaminers
 
 \include{resumo}
-
 \include{abstract}
 
 \listoffigures
 \listoftables
 \listadesiglas
 
-\sumario
+\tableofcontents
 
 \include{introducao}
-
 \include{capitulo1}
-
 \include{capitulo2}
-
 \include{capitulo3}
-
 \include{conclusao}
-
-%\apendice
-%\chapter{Primeiro Apendice}
-%\chapter{Segundo Apendice}
-
-%\anexo
-%\chapter{Gramática da Linguagem Funcional}
-%\label{ch:anexo-gramatica}
-%\chapter{Segundo Anexo}
 
 \bibliography{bib}
 \end{document}
